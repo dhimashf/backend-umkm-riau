@@ -1,6 +1,9 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import exampleRoutes from './routes/routes';
+import akunRoutes from './routes/AkunRoutes';
+import dokumentasiRoutes from './routes/dokumentasiRoutes';
+import boothRoutes from './routes/boothRoutes';
+import biodataRoutes from './routes/biodataRoutes';
 
 dotenv.config();
 
@@ -24,7 +27,10 @@ class App {
         });
 
         // Include other routes, for example:
-        this.app.use('/api', exampleRoutes);
+        this.app.use('/api/akun', akunRoutes);
+        this.app.use('/api/dokumentasi', dokumentasiRoutes);
+        this.app.use('/api/biodata', biodataRoutes );
+        this.app.use('/api/booth', boothRoutes );
     }
 }
 

@@ -28,6 +28,7 @@ class Database {
     public getConnection(): Pool {
         return this.pool;
     }
+
 }
 
 export default Database;
