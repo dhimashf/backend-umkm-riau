@@ -6,5 +6,7 @@ const controller = new BiodataController();
 
 biodataRoutes.get('/', controller.ListBiodata.bind(controller));
 biodataRoutes.get('/:nik', controller.getBiodataByNik.bind(controller));
+biodataRoutes.post('/', controller.addBiodata.bind(controller));
+biodataRoutes.put('/:nik', controller.updateBiodata.bind(controller));
 
 export default biodataRoutes;

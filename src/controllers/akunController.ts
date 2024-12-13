@@ -23,7 +23,7 @@ class AkunController {
 
     public async getAkunByPhone(req: Request, res: Response): Promise<void> {
         const { no_hp } = req.params;
-
+      
         try {
             const account = await this.akunService.getAkunByPhone(no_hp);
             if (!account) {

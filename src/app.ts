@@ -1,6 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import akunRoutes from './routes/AkunRoutes';
+import akunRoutes from './routes/akunRoutes';
 import dokumentasiRoutes from './routes/dokumentasiRoutes';
 import boothRoutes from './routes/boothRoutes';
 import biodataRoutes from './routes/biodataRoutes';
