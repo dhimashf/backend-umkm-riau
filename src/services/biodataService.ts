@@ -20,9 +20,9 @@ class biodataService {
     }
 
     // Mendapatkan biodata berdasarkan NIK
-    public async CekBiodataByNik(nik: string): Promise<RowDataPacket | null> {
+    public async CekBiodataById(nik: string): Promise<RowDataPacket | null> {
         const [result] = await this.db.query<RowDataPacket[]>(
-            `SELECT * FROM biodata WHERE nik = ?`, 
+            `SELECT * FROM biodata WHERE akun_id_akun = ?`, 
             [nik]
         );
         return result.length > 0 ? result[0] : null;

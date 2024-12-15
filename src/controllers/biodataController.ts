@@ -24,10 +24,10 @@ class BiodataController {
 
     // Endpoint untuk get biodata pelanggan berdasarkan NIK (/api/biodata/:nik)
     public async getBiodataByNik(req: Request, res: Response): Promise<void> {
-        const { nik } = req.params;
+        const { akun_id_akun } = req.params;
 
         try {
-            const biodata = await this.biodataService.CekBiodataByNik(nik);
+            const biodata = await this.biodataService.CekBiodataById(akun_id_akun);
 
             if (!biodata) {
                 res.status(404).json({
