@@ -25,14 +25,20 @@ class KreditService {
         await this.db.query('INSERT INTO beli_kredit (tanggal,bukti,jumlah,pembelian_id) VALUES (?, ?, ?, ?)', [tanggal,bukti,jumlah,pembelian_id]);
     }
 
-    public async updateRiwayatPembayaran(pembelian_id: string, Kredit: Partial<Kredit>): Promise<boolean> {
-        const { tanggal,bukti,jumlah } = Kredit;
-        const [result]: any = await this.db.query('UPDATE beli_kredit SET tanggal = ?, bukti = ?, jumlah = ? WHERE pembelian_id = ?', [tanggal,bukti,jumlah,pembelian_id]);
-        return result.affectedRows > 0;
-    }
+public async updateRiwayatPembayaran(id: string, kredit: Partial<Kredit>): Promise<boolean> {
+    const { tanggal, bukti, jumlah, pembelian_id } = kredit;
+    const [result]: any = await this.db.query(
+        `UPDATE beli_kredit 
+         SET tanggal = ?, bukti = ?, jumlah = ?, pembelian_id = ? 
+         WHERE id = ?`,
+        [tanggal, bukti, jumlah, pembelian_id, id] // Perbaikan urutan parameter
+    );
+    return result.affectedRows > 0;
+}
 
-    public async deleteRiwayatPembayaran(pembelian_id: string): Promise<boolean> {
-        const [result]: any = await this.db.query('DELETE FROM beli_kredit WHERE pembelian_id = ?', [pembelian_id]);
+
+    public async deleteRiwayatPembayaran(id: string): Promise<boolean> {
+        const [result]: any = await this.db.query('DELETE FROM beli_kredit WHERE id = ?', [id]);
         return result.affectedRows > 0;
     }
 }
