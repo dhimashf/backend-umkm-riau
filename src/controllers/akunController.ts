@@ -38,7 +38,8 @@ class AkunController {
 
             res.status(200).json({
                 success: true,
-                data: account,
+                message: 'Akun ditemukan.',
+                data: account
             });
         } catch (error) {
             res.status(500).json({
@@ -103,7 +104,8 @@ class AkunController {
             res.status(200).json({ 
                 success: true,
                 message: 'Login berhasil.', 
-                token });
+                token,
+                data: akun});
         } catch (error) {
             res.status(500).json({ success: false, message: 'Terjadi kesalahan saat login.', error });
         }
