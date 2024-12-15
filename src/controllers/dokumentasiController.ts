@@ -53,7 +53,7 @@ class DokumentasiController {
 
     public async addDokumentasi(req: Request, res: Response): Promise<void> {
         try {
-            const { id, jenis, ukuran, harga } = req.body;
+            const { id, jenis, ukuran, harga, deskripsi } = req.body;
             const fotoPath = req.file?.path; // Path file dari Multer
     
             // Validasi input
@@ -75,7 +75,7 @@ class DokumentasiController {
     
             // Tambah dokumentasi menggunakan service
             const isSuccess = await this.dokumentasiService.addDokumentasi(
-                { id, jenis, ukuran, harga, foto: '' }, // `foto` akan diisi oleh service
+                { id, jenis, ukuran, harga, foto: '', deskripsi }, // `foto` akan diisi oleh service
                 fotoPath
             );
     
@@ -102,14 +102,14 @@ class DokumentasiController {
     
     public async updateDokumentasi(req: Request, res: Response): Promise<void> {
         const { id } = req.params;
-        const { jenis, ukuran, harga } = req.body;
+        const { jenis, ukuran, harga, deskripsi } = req.body;
         const fotoPath = req.file?.path; // Path file dari Multer jika ada
     
         try {
             // Panggil service untuk update
             const updated = await this.dokumentasiService.updateDokumentasi(
                 id,
-                { jenis, ukuran, harga },
+                { jenis, ukuran, harga, deskripsi },
                 fotoPath // Tambahkan filePath opsional
             );
     
