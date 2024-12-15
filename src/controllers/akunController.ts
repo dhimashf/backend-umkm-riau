@@ -1,6 +1,8 @@
 // src/controller/akunController.ts
 import { Request, Response } from 'express';
 import AkunService from '../services/akunService';
+import jwt from 'jsonwebtoken';
+const secretKey = process.env.JWT_SECRET || 'default_secret_key';
 
 class AkunController {
     private akunService = new AkunService();
@@ -44,6 +46,88 @@ class AkunController {
                 message: 'Gagal mengambil Akun.',
                 error: (error as Error).message,
             });
+        }
+    }
+
+    public async register(req: Request, res: Response): Promise<void> {
+        const { no_hp, password } = req.body;
+
+        if (!no_hp || !password) {
+            res.status(400).json({ success: false, message: 'Nomor HP dan password wajib diisi.' });
+            return;
+        }
+
+        try {
+            const existingAkun = await this.akunService.getAkunByPhone(no_hp);
+            if (existingAkun) {
+                res.status(400).json({ success: false, message: 'Nomor HP sudah terdaftar.' });
+                return;
+            }
+
+            await this.akunService.register(no_hp, password);
+            res.status(201).json({ success: true, message: 'Registrasi berhasil.' });
+        } catch (error) {
+            res.status(500).json({ success: false, message: 'Terjadi kesalahan saat registrasi.', error });
+        }
+    }
+
+    public async login(req: Request, res: Response): Promise<void> {
+        const { no_hp, password } = req.body;
+
+        if (!no_hp || !password) {
+            res.status(400).json({ success: false, message: 'Nomor HP dan password wajib diisi.' });
+            return;
+        }
+
+        try {
+            const akun = await this.akunService.getAkunByPhone(no_hp);
+            if (!akun) {
+                res.status(401).json({ success: false, message: 'Nomor HP atau password salah.' });
+                return;
+            }
+
+            const isValid = await this.akunService.validateLogin(no_hp, password);
+            if (!isValid) {
+                res.status(401).json({ success: false, message: 'Nomor HP atau password salah.' });
+                return;
+            }
+
+            // Generate JWT
+            const token = jwt.sign({ 
+                id_akun: akun.id_akun,
+                role: akun.role },
+                secretKey,
+                { expiresIn: '1h' }
+            );
+
+            res.status(200).json({ 
+                success: true,
+                message: 'Login berhasil.', 
+                token });
+        } catch (error) {
+            res.status(500).json({ success: false, message: 'Terjadi kesalahan saat login.', error });
+        }
+    }
+
+    public async forgotPassword(req: Request, res: Response): Promise<void> {
+        const { no_hp, newPassword } = req.body;
+
+        if (!no_hp || !newPassword) {
+            res.status(400).json({ success: false, message: 'Nomor HP dan password baru wajib diisi.' });
+            return;
+        }
+
+        try {
+            const existingAkun = await this.akunService.getAkunByPhone(no_hp);
+            if (!existingAkun) {
+                res.status(404).json({ success: false, message: 'Akun dengan nomor HP tersebut tidak ditemukan.' });
+                return;
+            }
+
+            await this.akunService.updatePassword(no_hp, newPassword);
+            res.status(200).json({ success: true, message: 'Password berhasil diperbarui.' });
+        } catch (error) {
+            res.status(500).json({ success: false, message: 'Terjadi kesalahan saat memperbarui password.', error });
         }
     }
 }

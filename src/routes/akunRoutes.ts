@@ -1,10 +1,23 @@
 import { Router } from 'express';
-import UserController from '../controllers/akunController';
+import AkunController from '../controllers/akunController';
+import { authMiddleware } from '../middlewares/authMiddleware'; // Import authMiddleware
 
 const routes = Router();
-const userController = new UserController();
+const akunController = new AkunController();
 
-routes.get('/', (req, res) => userController.getAkun(req, res));
-routes.get('/:no_hp', (req, res) => userController.getAkunByPhone(req, res));
+// Route for getting all accounts (Protected Route)
+routes.get('/', (req, res) => akunController.getAkun(req, res));
+
+// Route for getting an account by phone number (Protected Route)
+routes.get('/:no_hp', authMiddleware, (req, res) => akunController.getAkunByPhone(req, res));
+
+// Route for user registration (No authentication needed)
+routes.post('/register', (req, res) => akunController.register(req, res));
+
+// Route for user login (No authentication needed)
+routes.post('/login', (req, res) => akunController.login(req, res));
+
+// Route for forgot password (No authentication needed)
+routes.post('/forgot-password', (req, res) => akunController.forgotPassword(req, res));
 
 export default routes;

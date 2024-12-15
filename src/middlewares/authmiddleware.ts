@@ -1,48 +1,44 @@
+// src/middleware/auth.ts
+
 import { Request, Response, NextFunction } from 'express';
-// import jwt from 'jsonwebtoken';
-import database from '../config/database';
+import jwt, { JwtPayload } from 'jsonwebtoken';
+import dotenv from 'dotenv';
 
-const secretKey = process.env.JWT_SECRET;
+dotenv.config();
 
-class authmiddleware {
-//   // Method untuk memverifikasi token JWT dan mengecek peran berdasarkan role
-//   public static async checkRole(role: string) {
-//     return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-//       const token = req.headers['authorization']?.split(' ')[1]; // Ambil token dari header Authorization
+const JWT_SECRET = process.env.JWT_SECRET || 'default-secret';
 
-//       if (!token) {
-//         return res.status(403).json({ success: false, message: 'Token tidak ditemukan.' });
-//       }
-
-//       try {
-//         // Verifikasi token
-//         const decoded: any = jwt.verify(token, secretKey);
-
-//         // Ambil data akun dari database berdasarkan id akun yang ada pada token
-//         const user = await db.query('SELECT * FROM AKUN WHERE id_akun = ?', [decoded.id_akun]);
-
-//         if (!user[0]) {
-//           return res.status(404).json({ success: false, message: 'Pengguna tidak ditemukan.' });
-//         }
-
-//         // Periksa apakah role pengguna sesuai dengan yang dibutuhkan
-//         if (user[0].role !== role) {
-//           return res.status(403).json({
-//             success: false,
-//             message: `Akses ditolak. Hanya dengan role ${role} yang diperbolehkan.`,
-//           });
-//         }
-
-//         // Menambahkan informasi pengguna ke objek request
-//         req.user = user[0];
-
-//         // Melanjutkan ke route handler berikutnya
-//         next();
-//       } catch (error) {
-//         return res.status(401).json({ success: false, message: 'Token tidak valid.' });
-//       }
-//     };
-//   }
+interface AuthenticatedRequest extends Request {
+    id_akun?: string;
+    no_hp?: string;
+    role?: string; // Add `peran` field
 }
 
-export default authmiddleware;
+
+export const authMiddleware = (req: AuthenticatedRequest, res: Response, next: NextFunction): void => {
+    const token = req.headers.authorization?.split(' ')[1];
+
+    if (!token) {
+        res.status(403).json({ message: "No token provided!" });
+        return;
+    }
+
+    // src/middleware/auth.ts
+
+jwt.verify(token, JWT_SECRET, (err, decoded) => {
+    if (err) {
+        console.error("Error verifying token:", err);
+        res.status(401).json({ message: "Unauthorized!" });
+        return;
+    }
+
+    if (decoded && typeof decoded === 'object') {
+        req.id_akun = (decoded as JwtPayload).id_akun;
+        req.no_hp = (decoded as JwtPayload).no_hp;
+        req.role = (decoded as JwtPayload).role; // Include the role (`peran`)
+    }
+
+    next();
+});
+
+};
