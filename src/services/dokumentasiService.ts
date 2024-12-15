@@ -4,7 +4,6 @@ import Database from '../config/database';
 import cloudinary from '../config/cloudinary';
 
 interface Dokumentasi {
-    id: string;
     jenis: string;
     ukuran: string;
     harga: number;
@@ -52,12 +51,12 @@ class DokumentasiService {
     
             // Dapatkan public_id dari Cloudinary
             const fotoPublicId = uploadResponse.public_id;
-            const { id, jenis, ukuran, harga,deskripsi } = dokumentasi;
+            const { jenis, ukuran, harga,deskripsi } = dokumentasi;
     
             // Simpan data ke database, termasuk public_id
             await this.db.query(
-                'INSERT INTO dokumentasi (id, jenis, ukuran, harga, foto,deskripsi) VALUES (?, ?, ?, ?, ?,?)',
-                [id, jenis, ukuran, harga, fotoPublicId,deskripsi]
+                'INSERT INTO dokumentasi (jenis, ukuran, harga, foto,deskripsi) VALUES (?, ?, ?, ?, ?)',
+                [ jenis, ukuran, harga, fotoPublicId,deskripsi]
             );
     
             return true; // Berhasil
