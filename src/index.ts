@@ -6,6 +6,7 @@ import akunRoutes from './routes/akunRoutes';
 import dokumentasiRoutes from './routes/dokumentasiRoutes';
 import boothRoutes from './routes/boothRoutes';
 import biodataRoutes from './routes/biodataRoutes';
+import pembelianRoutes from './routes/pembelianRoutes';
 
 dotenv.config();
 
@@ -46,6 +47,7 @@ class App {
         this.app.use('/api/dokumentasi', dokumentasiRoutes);
         this.app.use('/api/biodata', biodataRoutes);
         this.app.use('/api/booth', boothRoutes);
+        this.app.use('/api/pembelian', pembelianRoutes);
     }
 }
 
