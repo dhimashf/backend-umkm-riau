@@ -22,9 +22,9 @@ class KreditController {
 
 
 public async getPembayaranById(req: Request, res: Response): Promise<void> {
-    const {pembelian_id } = req.params;
+    const {id } = req.params;
     try {
-        const kredit = await this.kreditService.getRiwayatPembayaranByID(pembelian_id);
+        const kredit = await this.kreditService.getRiwayatPembayaranByID(id);
         if (!kredit) {
             res.status(404).json({
                 success: false,
@@ -65,11 +65,11 @@ public async addPembayaran(req: Request, res: Response): Promise<void> {
 }
 
 public async updateRiwayatPembayaran(req: Request, res: Response): Promise<void> {
-    const { pembelian_id } = req.params;
-    const { tanggal, bukti, jumlah } = req.body;
+    const { id } = req.params;
+    const { tanggal, bukti, jumlah, pembelian_id } = req.body;
 
     try {
-        const updated = await this.kreditService.updateRiwayatPembayaran(pembelian_id, { tanggal, bukti, jumlah }); 
+        const updated = await this.kreditService.updateRiwayatPembayaran(id, { tanggal, bukti, jumlah, pembelian_id }); 
         if (!updated) {
             res.status(404).json({
                 success: false,
@@ -91,11 +91,11 @@ public async updateRiwayatPembayaran(req: Request, res: Response): Promise<void>
     }
 }
 
-public async deleteRiwayatPembayaran(req: Request, res: Response): Promise<void> {
-    const { pembelian_id } = req.params;
+public async deleteRiwayatPembayaran(   req: Request, res: Response): Promise<void> {
+    const { id } = req.params;
 
     try {
-        const deleted = await this.kreditService.deleteRiwayatPembayaran(pembelian_id);
+        const deleted = await this.kreditService.deleteRiwayatPembayaran(id);
         if (!deleted) {
             res.status(404).json({
                 success: false,
