@@ -80,12 +80,12 @@ class AkunController {
             return;
         }
 
+        const akun = await this.akunService.getAkunByPhone(no_hp);
+        if (!akun) {
+            res.status(401).json({ success: false, message: 'Nomor HP atau password salah.' });
+            return;
+        }
         try {
-            const akun = await this.akunService.getAkunByPhone(no_hp);
-            if (!akun) {
-                res.status(401).json({ success: false, message: 'Nomor HP atau password salah.' });
-                return;
-            }
 
             const isValid = await this.akunService.validateLogin(no_hp, password);
             if (!isValid) {
