@@ -53,14 +53,14 @@ class DokumentasiController {
 
     public async addDokumentasi(req: Request, res: Response): Promise<void> {
         try {
-            const { id, jenis, ukuran, harga, deskripsi } = req.body;
+            const { jenis, ukuran, harga, deskripsi } = req.body;
             const fotoPath = req.file?.path; // Path file dari Multer
     
             // Validasi input
-            if (!id || !jenis || !ukuran || !harga) {
+            if ( !jenis || !ukuran || !harga) {
                 res.status(400).json({
                     success: false,
-                    message: 'Semua field (id, jenis, ukuran, harga) harus diisi.',
+                    message: 'Semua field (jenis, ukuran, harga) harus diisi.',
                 });
                 return;
             }
@@ -75,7 +75,7 @@ class DokumentasiController {
     
             // Tambah dokumentasi menggunakan service
             const isSuccess = await this.dokumentasiService.addDokumentasi(
-                { id, jenis, ukuran, harga, foto: '', deskripsi }, // `foto` akan diisi oleh service
+                {  jenis, ukuran, harga, foto: '', deskripsi }, // `foto` akan diisi oleh service
                 fotoPath
             );
     
