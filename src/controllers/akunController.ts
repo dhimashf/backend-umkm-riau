@@ -105,6 +105,8 @@ class AkunController {
                 success: true,
                 message: 'Login berhasil.', 
                 token,
+                id_akun: akun.id_akun,
+                no_hp: akun.no_hp,
                 role: akun.role });
         } catch (error) {
             res.status(500).json({ success: false, message: 'Terjadi kesalahan saat login.', error });
