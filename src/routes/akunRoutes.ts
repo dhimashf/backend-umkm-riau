@@ -1,15 +1,20 @@
 import { Router } from 'express';
 import AkunController from '../controllers/akunController';
-import { authMiddleware } from '../middlewares/authMiddleware'; // Import authMiddleware
+import AuthMiddleware from '../middlewares/authMiddleware'; // Import class middleware
 
 const routes = Router();
 const akunController = new AkunController();
+const authMiddleware = new AuthMiddleware(); // Inisialisasi middleware
 
 // Route for getting all accounts (Protected Route)
-routes.get('/', (req, res) => akunController.getAkun(req, res));
+routes.get('/', authMiddleware.verifyToken.bind(authMiddleware), (req, res) =>
+    akunController.getAkun(req, res)
+);
 
 // Route for getting an account by phone number (Protected Route)
-routes.get('/:no_hp', authMiddleware, (req, res) => akunController.getAkunByPhone(req, res));
+routes.get('/:no_hp', authMiddleware.verifyToken.bind(authMiddleware), (req, res) =>
+    akunController.getAkunByPhone(req, res)
+);
 
 // Route for user registration (No authentication needed)
 routes.post('/register', (req, res) => akunController.register(req, res));
