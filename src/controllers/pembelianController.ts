@@ -66,31 +66,31 @@ class PembelianController {
     }
 
     public async getPembelianByJenisPembayaran(req: Request, res: Response): Promise<void> {
-        const { jenis_pembayaran } = req.params;
-    
-        if (!['CASH', 'CREDIT'].includes(jenis_pembayaran)) {
-            res.status(400).json({
-                success: false,
-                message: 'Jenis pembayaran tidak valid. Gunakan "CASH" atau "CREDIT".',
-            });
-            return;
-        }
-    
-        try {
-            const pembelians = await this.pembelianService.getPembelianByJenisPembayaran(jenis_pembayaran as 'CASH' | 'CREDIT');
-            res.status(200).json({
-                success: true,
-                data: pembelians,
-            });
-        } catch (error) {
-            res.status(500).json({
-                success: false,
-                message: 'Failed to fetch pembelian data by jenis pembayaran.',
-                error: (error as Error).message,
-            });
-        }
+    const { jenis_pembayaran } = req.params;
+
+    if (!['CASH', 'CREDIT'].includes(jenis_pembayaran)) {
+        res.status(400).json({
+            success: false,
+            message: 'Jenis pembayaran tidak valid. Gunakan "CASH" atau "CREDIT".',
+        });
+        return;
     }
-    
+
+    try {
+        const pembelians = await this.pembelianService.getPembelianByJenisPembayaran(jenis_pembayaran as 'CASH' | 'CREDIT');
+        res.status(200).json({
+            success: true,
+            data: pembelians,
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Failed to fetch pembelian data by jenis pembayaran.',
+            error: (error as Error).message,
+        });
+    }
+}
+
 }
 
 export default PembelianController;
