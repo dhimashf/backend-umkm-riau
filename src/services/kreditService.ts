@@ -15,8 +15,8 @@ class KreditService {
         return rows;
     }
 
-    public async getRiwayatPembayaranByID(pembelian_id: string): Promise<Kredit | null> {
-        const [result]: any = await this.db.query('SELECT * FROM beli_kredit WHERE pembelian_id = ?', [ pembelian_id ]);
+    public async getRiwayatPembayaranByID(id:number): Promise<Kredit | null> {
+        const [result]: any = await this.db.query('SELECT * FROM beli_kredit WHERE id = ?', [ id ]);
         return result.length > 0 ? result[0] : null;
     }
 
