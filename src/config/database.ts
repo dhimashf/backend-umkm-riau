@@ -12,8 +12,8 @@ class Database {
             host: process.env.DB_HOST,
             user: process.env.DB_USER,
             password: process.env.DB_PASSWORD,
-            database: process.env.DB_DATABASE,
-            port: Number(process.env.DB_PORT),
+            database: process.env.DB_DATABASE, // Pastikan ini merujuk ke nama database yang benar
+            port: Number(process.env.DB_PORT) || 3306, // Default ke 3306 jika DB_PORT tidak ada
         });
     }
 
@@ -28,7 +28,6 @@ class Database {
     public getConnection(): Pool {
         return this.pool;
     }
-
 }
 
 export default Database;

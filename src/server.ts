@@ -1,7 +1,7 @@
 import app from '.';
 import Database from './config/database';
 
-const PORT = process.env.PORT || 3003;
+const PORT = process.env.PORT ||3306;
 
 // Start the server
 app.listen(PORT, () => {
