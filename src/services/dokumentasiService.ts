@@ -8,7 +8,8 @@ interface Dokumentasi {
     jenis: string;
     ukuran: string;
     harga: number;
-    foto: string; // public_id dari Cloudinary
+    foto: string;
+    deskripsi?: string;
 }
 
 class DokumentasiService {
@@ -51,12 +52,12 @@ class DokumentasiService {
     
             // Dapatkan public_id dari Cloudinary
             const fotoPublicId = uploadResponse.public_id;
-            const { id, jenis, ukuran, harga } = dokumentasi;
+            const { id, jenis, ukuran, harga,deskripsi } = dokumentasi;
     
             // Simpan data ke database, termasuk public_id
             await this.db.query(
-                'INSERT INTO dokumentasi (id, jenis, ukuran, harga, foto) VALUES (?, ?, ?, ?, ?)',
-                [id, jenis, ukuran, harga, fotoPublicId]
+                'INSERT INTO dokumentasi (id, jenis, ukuran, harga, foto,deskripsi) VALUES (?, ?, ?, ?, ?,?)',
+                [id, jenis, ukuran, harga, fotoPublicId,deskripsi]
             );
     
             return true; // Berhasil
@@ -74,7 +75,7 @@ class DokumentasiService {
         filePath?: string // Tambahkan opsional filePath untuk file baru
     ): Promise<boolean> {
         try {
-            const { jenis, ukuran, harga } = dokumentasi;
+            const { jenis, ukuran, harga,deskripsi } = dokumentasi;
     
             // Ambil data foto lama dari database
             const [currentData]: any = await this.db.query('SELECT foto FROM dokumentasi WHERE id = ?', [id]);
@@ -100,8 +101,8 @@ class DokumentasiService {
     
             // Update database (jika fotoPublicId tetap sama, berarti foto tidak diubah)
             const [result]: any = await this.db.query(
-                'UPDATE dokumentasi SET jenis = ?, ukuran = ?, harga = ?, foto = ? WHERE id = ?',
-                [jenis, ukuran, harga, fotoPublicId, id]
+                'UPDATE dokumentasi SET jenis = ?, ukuran = ?, harga = ?, foto = ?,deskripsi = ? WHERE id = ?',
+                [jenis, ukuran, harga, fotoPublicId,deskripsi,id]
             );
     
             return result.affectedRows > 0; // Berhasil jika ada baris yang diperbarui
