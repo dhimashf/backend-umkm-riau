@@ -24,7 +24,7 @@ class KreditController {
 public async getPembayaranById(req: Request, res: Response): Promise<void> {
     const {id } = req.params;
     try {
-        const kredit = await this.kreditService.getRiwayatPembayaranByID(id);
+        const kredit = await this.kreditService.getRiwayatPembayaranByID(Number(id));
         if (!kredit) {
             res.status(404).json({
                 success: false,
