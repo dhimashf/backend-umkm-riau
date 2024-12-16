@@ -35,17 +35,16 @@ class biodataService {
             if (!filePath) {
                 throw new Error('File path tidak valid.');
             }
-    
+
             // Upload file ke Cloudinary
             const uploadResponse = await cloudinary.uploader.upload(filePath, {
                 folder: 'products',
             });
-    
+
             // Gunakan URL penuh dari Cloudinary
             const fotoKTP = uploadResponse.secure_url; // Mengambil URL lengkap yang dihasilkan oleh Cloudinary
-    
             const { nik, nama, alamat, jenis_kelamin, alamat_domisili, akun_id_akun } = biodata;
-    
+
             // Simpan data ke database
             await this.db.query(
                 'INSERT INTO biodata (nik, nama, alamat, jenis_kelamin, alamat_domisili, foto_ktp, akun_id_akun) VALUES (?, ?, ?, ?, ?, ?, ?)',
@@ -56,28 +55,19 @@ class biodataService {
             throw error; // Lemparkan error agar ditangani di controller
         }
     }
-    
+
        
     
     public async updateBiodata(
         nik: string,
         biodata: Partial<Biodata>,
-        filePath?: string
     ): Promise<boolean> {
         try {
-            let fotoKtpUrl = biodata.foto_ktp;
-    
-            if (filePath) {
-                // Upload file baru ke Cloudinary
-                const uploadResponse = await cloudinary.uploader.upload(filePath, { folder: 'products' });
-                fotoKtpUrl = `https://res.cloudinary.com/dyp5hdb6e/image/upload/v1/products/${uploadResponse.public_id}`;
-            }
-    
-            const { nama, alamat, jenis_kelamin, alamat_domisili, akun_id_akun } = biodata;
+            const { nama, alamat, jenis_kelamin, alamat_domisili } = biodata;
     
             const [result]: any = await this.db.query(
-                'UPDATE biodata SET nama = ?, alamat = ?, jenis_kelamin = ?, alamat_domisili = ?, foto_ktp = ?, akun_id_akun = ? WHERE nik = ?',
-                [nama, alamat, jenis_kelamin, alamat_domisili, fotoKtpUrl, akun_id_akun, nik]
+                'UPDATE biodata SET nama = ?, alamat = ?, jenis_kelamin = ?, alamat_domisili = ? WHERE nik = ?',
+                [nama, alamat, jenis_kelamin, alamat_domisili, nik]
             );
     
             return result.affectedRows > 0;
@@ -86,8 +76,6 @@ class biodataService {
             throw error;
         }
     }
-    
-    
 }
 
 
