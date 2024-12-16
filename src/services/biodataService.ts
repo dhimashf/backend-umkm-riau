@@ -31,46 +31,63 @@ class biodataService {
 
     public async addBiodata(biodata: Biodata, filePath: string): Promise<void> {
         try {
-            const uploadResponse = await cloudinary.uploader.upload(filePath, { folder: 'products' });
-            const fotoKtpPublicId = uploadResponse.public_id;
-
+            // Validasi apakah filePath valid
+            if (!filePath) {
+                throw new Error('File path tidak valid.');
+            }
+    
+            // Upload file ke Cloudinary
+            const uploadResponse = await cloudinary.uploader.upload(filePath, {
+                folder: 'products',
+            });
+    
+            // Gunakan URL penuh dari Cloudinary
+            const fotoKTP = uploadResponse.secure_url; // Mengambil URL lengkap yang dihasilkan oleh Cloudinary
+    
             const { nik, nama, alamat, jenis_kelamin, alamat_domisili, akun_id_akun } = biodata;
+    
+            // Simpan data ke database
             await this.db.query(
                 'INSERT INTO biodata (nik, nama, alamat, jenis_kelamin, alamat_domisili, foto_ktp, akun_id_akun) VALUES (?, ?, ?, ?, ?, ?, ?)',
-                [nik, nama, alamat, jenis_kelamin, alamat_domisili, fotoKtpPublicId, akun_id_akun]
+                [nik, nama, alamat, jenis_kelamin, alamat_domisili, fotoKTP, akun_id_akun]
             );
         } catch (error) {
-            console.error('Error uploading KTP:', error);
-            throw error;
+            console.error('Error adding biodata:', error);
+            throw error; // Lemparkan error agar ditangani di controller
         }
     }
-
+    
+       
+    
     public async updateBiodata(
         nik: string,
         biodata: Partial<Biodata>,
         filePath?: string
     ): Promise<boolean> {
         try {
-            let fotoKtpPublicId = biodata.foto_ktp;
-
+            let fotoKtpUrl = biodata.foto_ktp;
+    
             if (filePath) {
-                // Jika ada file baru, unggah ke Cloudinary
+                // Upload file baru ke Cloudinary
                 const uploadResponse = await cloudinary.uploader.upload(filePath, { folder: 'products' });
-                fotoKtpPublicId = uploadResponse.public_id;
+                fotoKtpUrl = `https://res.cloudinary.com/dyp5hdb6e/image/upload/v1/products/${uploadResponse.public_id}`;
             }
-
+    
             const { nama, alamat, jenis_kelamin, alamat_domisili, akun_id_akun } = biodata;
+    
             const [result]: any = await this.db.query(
                 'UPDATE biodata SET nama = ?, alamat = ?, jenis_kelamin = ?, alamat_domisili = ?, foto_ktp = ?, akun_id_akun = ? WHERE nik = ?',
-                [nama, alamat, jenis_kelamin, alamat_domisili, fotoKtpPublicId, akun_id_akun, nik]
+                [nama, alamat, jenis_kelamin, alamat_domisili, fotoKtpUrl, akun_id_akun, nik]
             );
-
+    
             return result.affectedRows > 0;
         } catch (error) {
-            console.error('Error updating biodata:', error);
+            console.error('Error updating Biodata:', error);
             throw error;
         }
     }
+    
+    
 }
 
 

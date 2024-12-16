@@ -51,21 +51,24 @@ class BiodataController {
     }
     public async addBiodata(req: Request, res: Response): Promise<void> {
         const { nik, nama, alamat, jenis_kelamin, alamat_domisili, akun_id_akun } = req.body;
-        const filePath = req.file?.path; // Dapatkan path file dari multer
-
+        const filePath = req.file?.path; // Dapatkan path file dari Multer
+    
         if (!filePath) {
             res.status(400).json({ success: false, message: 'Foto KTP harus diunggah.' });
             return;
         }
-
+    
         try {
+            // Panggil service untuk menambahkan biodata
             await this.biodataService.addBiodata(
                 { nik, nama, alamat, jenis_kelamin, alamat_domisili, foto_ktp: '', akun_id_akun },
                 filePath
             );
-
+    
             res.status(201).json({ success: true, message: 'Biodata berhasil ditambahkan.' });
         } catch (error) {
+            console.error('Error in addBiodata:', error);
+    
             res.status(500).json({
                 success: false,
                 message: 'Gagal menambahkan Biodata.',
@@ -73,6 +76,7 @@ class BiodataController {
             });
         }
     }
+    
 
     public async updateBiodata(req: Request, res: Response): Promise<void> {
         const { nik } = req.params;
