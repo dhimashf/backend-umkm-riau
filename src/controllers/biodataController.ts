@@ -23,7 +23,7 @@ class BiodataController {
     }
 
     // Endpoint untuk get biodata pelanggan berdasarkan NIK (/api/biodata/:nik)
-    public async getBiodataByNik(req: Request, res: Response): Promise<void> {
+    public async getBiodataById(req: Request, res: Response): Promise<void> {
         const { akun_id_akun } = req.params;
 
         try {
@@ -81,13 +81,11 @@ class BiodataController {
     public async updateBiodata(req: Request, res: Response): Promise<void> {
         const { nik } = req.params;
         const { nama, alamat, jenis_kelamin, alamat_domisili, akun_id_akun } = req.body;
-        const filePath = req.file?.path; // Dapatkan path file dari multer jika ada
 
         try {
             const updated = await this.biodataService.updateBiodata(
                 nik,
-                { nama, alamat, jenis_kelamin, alamat_domisili, foto_ktp: '', akun_id_akun },
-                filePath
+                { nama, alamat, jenis_kelamin, alamat_domisili, foto_ktp: '', akun_id_akun }
             );
 
             if (!updated) {
