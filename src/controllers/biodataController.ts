@@ -50,48 +50,56 @@ class BiodataController {
         }
     }
     public async addBiodata(req: Request, res: Response): Promise<void> {
-      const { nik,nama,alamat,jenis_kelamin,alamat_domisili,foto_ktp,akun_id_akun } = req.body;
+        const { nik, nama, alamat, jenis_kelamin, alamat_domisili, akun_id_akun } = req.body;
+        const filePath = req.file?.path; // Dapatkan path file dari multer
 
-      try {
-          await this.biodataService.addbiodata({nik,nama,alamat,jenis_kelamin,alamat_domisili,foto_ktp,akun_id_akun });
-          res.status(201).json({
-              success: true,
-              message: 'Biodata berhasil ditambahkan.',
-          });
-      } catch (error) {
-          res.status(500).json({
-              success: false,
-              message: 'Gagal menambahkan Biodata.',
-              error: (error as Error).message,
-          });
-      }
-  }
-    public async updateBiodata(req: Request, res: Response): Promise<void> {
-      const { nik } = req.params;  // Extract NIK from URL params
-      const {nama,alamat,jenis_kelamin,alamat_domisili,foto_ktp,akun_id_akun} = req.body;  // Extract biodata from the request body
-
-      try {
-        const updated = await this.biodataService.updateBiodata(nik, { nama,alamat,jenis_kelamin,alamat_domisili,foto_ktp,akun_id_akun});
-        if (!updated) {
-            res.status(404).json({
-                success: false,
-                message: 'Biodata tidak ditemukan.',
-            });
+        if (!filePath) {
+            res.status(400).json({ success: false, message: 'Foto KTP harus diunggah.' });
             return;
         }
 
-        res.status(200).json({
-            success: true,
-            message: 'Biodata berhasil diperbarui.',
-        });
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: 'Gagal memperbarui Biodata.',
-            error: (error as Error).message,
-        });
+        try {
+            await this.biodataService.addBiodata(
+                { nik, nama, alamat, jenis_kelamin, alamat_domisili, foto_ktp: '', akun_id_akun },
+                filePath
+            );
+
+            res.status(201).json({ success: true, message: 'Biodata berhasil ditambahkan.' });
+        } catch (error) {
+            res.status(500).json({
+                success: false,
+                message: 'Gagal menambahkan Biodata.',
+                error: (error as Error).message,
+            });
+        }
     }
-  }
+
+    public async updateBiodata(req: Request, res: Response): Promise<void> {
+        const { nik } = req.params;
+        const { nama, alamat, jenis_kelamin, alamat_domisili, akun_id_akun } = req.body;
+        const filePath = req.file?.path; // Dapatkan path file dari multer jika ada
+
+        try {
+            const updated = await this.biodataService.updateBiodata(
+                nik,
+                { nama, alamat, jenis_kelamin, alamat_domisili, foto_ktp: '', akun_id_akun },
+                filePath
+            );
+
+            if (!updated) {
+                res.status(404).json({ success: false, message: 'Biodata tidak ditemukan.' });
+                return;
+            }
+
+            res.status(200).json({ success: true, message: 'Biodata berhasil diperbarui.' });
+        } catch (error) {
+            res.status(500).json({
+                success: false,
+                message: 'Gagal memperbarui Biodata.',
+                error: (error as Error).message,
+            });
+        }
+    }
 }
 
 export default BiodataController;
