@@ -40,12 +40,12 @@ class PenyewaanController {
             await this.penyewaanService.updatePenyewaan(id_sewa, penyewaan);
             res.status(201).json({
                 success: true,
-                message: 'Penyewaan added successfully.',
+                message: 'Penyewaan Update successfully.',
             });
         } catch (error) {
             res.status(500).json({
                 success: false,
-                message: 'Failed to add Penyewaan.',
+                message: 'Failed to Update Penyewaan.',
                 error: (error as Error).message,
             });
         }
