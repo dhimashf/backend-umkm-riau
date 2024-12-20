@@ -10,7 +10,7 @@ class PenyewaanController {
         const { id_sewa, mulai_sewa, akhir_sewa, lokasi, status, booth_id_booth, biodata_nik, durasi } = req.body;
     
         try {
-            await this.penyewaanService.addPenyewaan({ id_sewa,mulai_sewa, akhir_sewa, lokasi, status, booth_id_booth, biodata_nik, durasi });
+            await this.penyewaanService.addPenyewaan({ id_sewa,mulai_sewa, akhir_sewa, lokasi, status, booth_id_booth, biodata_nik, durasi, permintaan_dibuat: new Date() });
             res.status(201).json({
                 success: true,
                 message: 'Permintaan Penyewaan Berhasil di Tambah.',

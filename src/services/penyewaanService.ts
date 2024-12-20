@@ -11,6 +11,8 @@ interface Penyewaan {
     booth_id_booth: string;
     biodata_nik: string;
     durasi: number;
+    permintaan_dibuat : Date;
+    
 }
 
 class PenyewaanService {
