@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import AkunController from '../controllers/akunController';
+// import AuthMiddleware from '../middlewares/authMiddleware';
 
 const akunRoutes = Router();
 const controller = new AkunController();
