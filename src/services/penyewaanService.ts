@@ -17,10 +17,10 @@ class PenyewaanService {
     private db = Database.getInstance().getConnection();
 
     public async addPenyewaan(penyewaan: Penyewaan): Promise<void> {
-        const { id_sewa, mulai_sewa, akhir_sewa, lokasi, status, booth_id_booth, biodata_nik, durasi } = penyewaan;
+        const {  mulai_sewa, akhir_sewa, lokasi, status, booth_id_booth, biodata_nik, durasi } = penyewaan;
         await this.db.query(
-            'INSERT INTO penyewaan (id_sewa, mulai_sewa, akhir_sewa, lokasi, status, booth_id_booth, biodata_nik, durasi) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-            [id_sewa, mulai_sewa, akhir_sewa, lokasi, status, booth_id_booth, biodata_nik, durasi]
+            'INSERT INTO penyewaan (mulai_sewa, akhir_sewa, lokasi, status, booth_id_booth, biodata_nik, durasi) VALUES (?, ?, ?, ?, ?, ?, ?)',
+            [ mulai_sewa, akhir_sewa, lokasi, status, booth_id_booth, biodata_nik, durasi]
         );
     }
 
