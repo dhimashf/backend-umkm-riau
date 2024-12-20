@@ -32,6 +32,30 @@ class PenyewaanController {
             res.status(500).json({ success: false, message: 'Gagal mengambil data penyewaan.', error: (error as Error).message });
         }
     }
+    public async getPenyewaanByNik(req: Request, res: Response): Promise<void> {
+        const { biodata_nik } = req.params;
+        try {
+            const penyewaan = await this.penyewaanService.getPenyewaanByNik(biodata_nik);
+            if (!penyewaan) {
+                res.status(404).json({
+                    success: false,
+                    message: 'Penyewaan not found.',
+                });
+                return;
+            }
+    
+            res.status(200).json({
+                success: true,
+                data: penyewaan,
+            });
+        } catch (error) {
+            res.status(500).json({
+                success: false,
+                message: 'Failed to fetch Penyewaan.',
+                error: (error as Error).message,
+            });
+        }
+    }
 
     public async updatePenyewaan(req: Request, res: Response): Promise<void> {
         const { id_sewa } = req.params;
@@ -66,6 +90,7 @@ class PenyewaanController {
             res.status(500).json({ success: false, message: 'Gagal menghapus penyewaan.', error: (error as Error).message });
         }
     }
+    
 }
 
 export default PenyewaanController;
