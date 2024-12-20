@@ -28,6 +28,11 @@ class PenyewaanService {
         const [rows] = await this.db.query<RowDataPacket[]>('SELECT * FROM penyewaan');
         return rows;
     }
+    public async getPenyewaanByNik(biodata_nik: string): Promise<RowDataPacket[]> {
+        // Memastikan query menerima biodata_nik sebagai parameter
+        const [rows] = await this.db.query<RowDataPacket[]>('SELECT * FROM penyewaan WHERE biodata_nik = ?', [biodata_nik]);
+        return rows;
+    }
 
     public async updatePenyewaan(id_sewa: string, penyewaan: Partial<Penyewaan>): Promise<boolean> {
         const { mulai_sewa, akhir_sewa, lokasi, status, booth_id_booth, durasi } = penyewaan;
@@ -46,6 +51,17 @@ class PenyewaanService {
     public async hapusPenyewaan(id_sewa: string): Promise<boolean> {
         const [result]: any = await this.db.query('DELETE FROM penyewaan WHERE id_sewa = ?', [id_sewa]);
         return result.affectedRows > 0;
+    }
+     public async getPermintaanPenyewaan(biodata_nik: string): Promise<RowDataPacket[]> {
+        const [rows] = await this.db.query<RowDataPacket[]>(
+            `SELECT b.nik, b.nama, b.alamat, b.jenis_kelamin, b.alamat_domisili, b.foto_ktp, 
+            p.lokasi AS lokasi_booth, p.durasi
+            FROM biodata b
+            JOIN penyewaan p ON b.nik = p.biodata_nik
+            WHERE b.nik = ?`,
+            [biodata_nik]
+        );
+        return rows;
     }
 }
 
