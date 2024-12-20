@@ -36,14 +36,15 @@ class PenyewaanController {
         const { biodata_nik } = req.params;
         try {
             const penyewaan = await this.penyewaanService.getPenyewaanByNik(biodata_nik);
+
             if (!penyewaan) {
                 res.status(404).json({
                     success: false,
-                    message: 'Penyewaan not found.',
+                    message: 'Penyewaan tidak ditemukan.',
                 });
                 return;
             }
-    
+
             res.status(200).json({
                 success: true,
                 data: penyewaan,
@@ -51,7 +52,7 @@ class PenyewaanController {
         } catch (error) {
             res.status(500).json({
                 success: false,
-                message: 'Failed to fetch Penyewaan.',
+                message: 'Gagal mengambil Penyewaan.',
                 error: (error as Error).message,
             });
         }

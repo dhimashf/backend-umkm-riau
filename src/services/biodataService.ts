@@ -15,15 +15,22 @@ class biodataService {
     private db = Database.getInstance().getConnection();
 
     // Mendapatkan semua biodata
-    public async CekListBiodata(): Promise<RowDataPacket[]> {
+    public async GetAllBiodata(): Promise<RowDataPacket[]> {
         const [rows] = await this.db.query<RowDataPacket[]>('SELECT * FROM biodata');
         return rows;
     }
 
-    // Mendapatkan biodata berdasarkan NIK
-    public async CekBiodataById(nik: string): Promise<RowDataPacket | null> {
+    public async GetBiodataById(id_akun: string): Promise<RowDataPacket | null> {
         const [result] = await this.db.query<RowDataPacket[]>(
             `SELECT * FROM biodata WHERE akun_id_akun = ?`, 
+            [id_akun]
+        );
+        return result.length > 0 ? result[0] : null;
+    }
+    // Mendapatkan biodata berdasarkan NIK
+    public async GetBiodataByNik(nik: string): Promise<RowDataPacket | null> {
+        const [result] = await this.db.query<RowDataPacket[]>(
+            `SELECT * FROM biodata WHERE nik = ?`,
             [nik]
         );
         return result.length > 0 ? result[0] : null;

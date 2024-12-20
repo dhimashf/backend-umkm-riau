@@ -6,9 +6,9 @@ class BiodataController {
     private biodataService = new BiodataService();
 
     // Endpoint untuk get semua biodata pelanggan (/api/biodata)
-    public async ListBiodata(req: Request, res: Response): Promise<void> {
+    public async GetAllBiodata(req: Request, res: Response): Promise<void> {
         try {
-            const data = await this.biodataService.CekListBiodata();
+            const data = await this.biodataService.GetAllBiodata();
             res.status(200).json({
                 success: true,
                 data,
@@ -27,7 +27,33 @@ class BiodataController {
         const { akun_id_akun } = req.params;
 
         try {
-            const biodata = await this.biodataService.CekBiodataById(akun_id_akun);
+            const biodata = await this.biodataService.GetBiodataById(akun_id_akun);
+
+            if (!biodata) {
+                res.status(404).json({
+                    success: false,
+                    message: 'Biodata tidak ditemukan.',
+                });
+                return;
+            }
+
+            res.status(200).json({
+                success: true,
+                data: biodata,
+            });
+        } catch (error) {
+            res.status(500).json({
+                success: false,
+                message: 'Gagal mengambil Biodata.',
+                error: (error as Error).message,
+            });
+        }
+    }
+    public async getBiodataByNik(req: Request, res: Response): Promise<void> {
+        const { nik } = req.params;
+
+        try {
+            const biodata = await this.biodataService.GetBiodataByNik(nik);
 
             if (!biodata) {
                 res.status(404).json({
