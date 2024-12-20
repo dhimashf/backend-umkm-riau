@@ -6,10 +6,10 @@
 
 // dotenv.config();
 
-// const JWT_SECRET = process.env.JWT_SECRET || 'default-secret';
+// const JWT_SECRET = process.env.JWT_SECRET || '';
 
 // // Interface untuk request yang terautentikasi
-// interface AuthenticatedRequest extends Request {
+// export interface AuthenticatedRequest extends Request {
 //     id_akun?: string;
 //     no_hp?: string;
 //     role?: string;
@@ -46,6 +46,22 @@
 
 //             next();
 //         });
+//     }
+
+//     public checkRole(requiredRole: string) {
+//         return (req: AuthenticatedRequest, res: Response, next: NextFunction): void => {
+//             if (!req.role) {
+//                 res.status(403).json({ message: "Role not found in token!" });
+//                 return;  // Pastikan tidak ada nilai yang dikembalikan setelah ini
+//             }
+
+//             if (req.role !== requiredRole) {
+//                 res.status(403).json({ message: "Anda tidak memiliki akses kesini" });
+//                 return;  // Pastikan tidak ada nilai yang dikembalikan setelah ini
+//             }
+
+//             next();  // Lanjutkan eksekusi jika role cocok
+//         };
 //     }
 // }
 
