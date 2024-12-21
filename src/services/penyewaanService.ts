@@ -37,14 +37,14 @@ class PenyewaanService {
     }
 
     public async updatePenyewaan(id_sewa: string, penyewaan: Partial<Penyewaan>): Promise<boolean> {
-        const { mulai_sewa, akhir_sewa, lokasi, status, booth_id_booth, durasi } = penyewaan;
+        const { mulai_sewa, akhir_sewa, status, booth_id_booth } = penyewaan;
     
         // Query SQL memerlukan nilai individu untuk setiap kolom
         const [result]: any = await this.db.query(
             `UPDATE penyewaan 
-             SET mulai_sewa = ?, akhir_sewa = ?, lokasi = ?, status = ?, booth_id_booth = ?, durasi = ? 
+             SET mulai_sewa = ?, akhir_sewa = ?, status = ?, booth_id_booth = ?, 
              WHERE id_sewa = ?`,
-            [mulai_sewa, akhir_sewa, lokasi, status, booth_id_booth, durasi, id_sewa]
+            [mulai_sewa, akhir_sewa, status, booth_id_booth, id_sewa]
         );
     
         return result.affectedRows > 0;
