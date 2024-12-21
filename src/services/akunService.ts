@@ -26,6 +26,14 @@ class AkunService {
     );
     return result.length > 0 ? (result[0] as Akun) : null; // Cast ke Akun jika ada data
   }
+  public async getAkunById(id_akun: number): Promise<Akun | null> {
+    const [result]: [RowDataPacket[], any] = await this.db.query(
+      'SELECT * FROM AKUN WHERE id_akun = ?',
+      [id_akun]
+    );
+    return result.length > 0 ? (result[0] as Akun) : null; // Cast ke Akun jika ada data
+  }
+
 
   // Register a new account
 public async register(akun: Pick<Akun, 'no_hp' | 'password'>): Promise<boolean> {

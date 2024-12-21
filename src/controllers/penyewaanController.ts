@@ -23,7 +23,6 @@ class PenyewaanController {
             });
         }
     }
-
     public async getAllPenyewaan(req: Request, res: Response): Promise<void> {
         try {
             const data = await this.penyewaanService.getAllPenyewaan();
@@ -57,7 +56,6 @@ class PenyewaanController {
             });
         }
     }
-
     public async updatePenyewaan(req: Request, res: Response): Promise<void> {
         const { id_sewa } = req.params;
         const penyewaan = req.body;
@@ -75,8 +73,6 @@ class PenyewaanController {
             });
         }
     }
-
-
     public async hapusPenyewaan(req: Request, res: Response): Promise<void> {
         const { id_sewa } = req.params;
         try {

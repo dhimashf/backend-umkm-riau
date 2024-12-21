@@ -39,10 +39,7 @@ class DokumentasiService {
     // Menambahkan dokumentasi baru
     public async addDokumentasi(dokumentasi: Dokumentasi, filePath: string): Promise<boolean> {
         try {
-            // Validasi apakah filePath sudah ada
-            if (!filePath) {
-                throw new Error('File path tidak valid.');
-            }
+           
     
             // Upload file ke Cloudinary satu kali
             const uploadResponse = await cloudinary.uploader.upload(filePath, {
