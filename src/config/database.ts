@@ -16,7 +16,6 @@ class Database {
             port: Number(process.env.DB_PORT) || 3306, // Default ke 3306 jika DB_PORT tidak ada
         });
     }
-
     // Static method to access the single instance
     public static getInstance(): Database {
         if (!Database.instance) {

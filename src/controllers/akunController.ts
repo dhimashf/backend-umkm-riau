@@ -49,31 +49,55 @@ class AkunController {
             });
         }
     }
+    public async getAkunById(req: Request, res: Response): Promise<void> {
+        const { id_akun } = req.params;
+    
+        try {
+          const account = await this.akunService.getAkunById(Number(id_akun));
+          if (!account) {
+            res.status(404).json({
+              success: false,
+              message: 'Akun tidak ditemukan.',
+            });
+            return;
+          }
+    
+          res.status(200).json({
+            success: true,
+            message: 'Akun ditemukan.',
+            data: account,
+          });
+        } catch (error) {
+          res.status(500).json({
+            success: false,
+            message: 'Gagal mengambil Akun.',
+            error: (error as Error).message,
+          });
+        }
+      }
 
-public async register(req: Request, res: Response): Promise<void> {
-    const { no_hp, password } = req.body;
+    public async register(req: Request, res: Response): Promise<void> {
+        const { no_hp, password } = req.body;
 
-    if (!no_hp || !password) {
-        res.status(400).json({ success: false, message: 'Nomor HP dan password wajib diisi.' });
-        return;
-    }
-
-    try {
-        const existingAkun = await this.akunService.getAkunByPhone(no_hp);
-        if (existingAkun) {
-            res.status(400).json({ success: false, message: 'Nomor HP sudah terdaftar.' });
+        if (!no_hp || !password) {
+            res.status(400).json({ success: false, message: 'Nomor HP dan password wajib diisi.' });
             return;
         }
 
-        // Perbaiki pemanggilan fungsi register
-        await this.akunService.register({ no_hp, password });
-        res.status(201).json({ success: true, message: 'Registrasi berhasil.' });
-    } catch (error) {
-        res.status(500).json({ success: false, message: 'Terjadi kesalahan saat registrasi.', error });
+        try {
+            const existingAkun = await this.akunService.getAkunByPhone(no_hp);
+            if (existingAkun) {
+                res.status(400).json({ success: false, message: 'Nomor HP sudah terdaftar.' });
+                return;
+            }
+
+            // Perbaiki pemanggilan fungsi register
+            await this.akunService.register({ no_hp, password });
+            res.status(201).json({ success: true, message: 'Registrasi berhasil.' });
+        } catch (error) {
+            res.status(500).json({ success: false, message: 'Terjadi kesalahan saat registrasi.', error });
+        }
     }
-}
-
-
     public async login(req: Request, res: Response): Promise<void> {
         const { no_hp, password } = req.body;
 
@@ -114,7 +138,6 @@ public async register(req: Request, res: Response): Promise<void> {
             res.status(500).json({ success: false, message: 'Terjadi kesalahan saat login.', error });
         }
     }
-
     public async forgotPassword(req: Request, res: Response): Promise<void> {
         const { no_hp, newPassword } = req.body;
 
