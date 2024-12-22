@@ -19,6 +19,21 @@ class BoothController {
             });
         }
     }
+    public async BoothReady(req: Request, res: Response): Promise<void> {
+        try {
+            const booths = await this.boothService.CekBoothReady();
+            res.status(200).json({
+                success: true,
+                data: booths,
+            });
+        } catch (error) {
+            res.status(500).json({
+                success: false,
+                message: 'Failed to fetch data',
+                error: (error as Error).message,
+            });
+        }
+    }
 
 
     public async getBoothByID(req: Request, res: Response): Promise<void> {

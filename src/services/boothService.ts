@@ -15,6 +15,10 @@ class BoothService {
         const [rows] = await this.db.query<RowDataPacket[]>('SELECT * FROM booth');
         return rows;
     }
+    public async CekBoothReady(): Promise<RowDataPacket[]> {
+        const [rows] = await this.db.query<RowDataPacket[]>('SELECT * FROM booth WHERE status = "TIDAK DISEWA"');
+        return rows;
+    }
 
     public async getBoothByID(id_booth: string): Promise<Booth | null> {
         const [result]: any = await this.db.query('SELECT * FROM booth WHERE id_booth = ?', [id_booth]);

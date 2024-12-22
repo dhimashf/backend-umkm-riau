@@ -5,6 +5,7 @@ const boothRoutes = Router();
 const controller = new boothController();
 
 boothRoutes.get('/', controller.ListBooth.bind(controller));
+boothRoutes.get('/ready/', controller.BoothReady.bind(controller));
 boothRoutes.get('/:id', controller.getBoothByID.bind(controller));
 boothRoutes.post('/', controller.addBooth.bind(controller));
 boothRoutes.put('/:id_booth', controller.updateBooth.bind(controller));
