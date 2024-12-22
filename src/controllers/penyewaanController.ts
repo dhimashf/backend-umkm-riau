@@ -31,6 +31,14 @@ class PenyewaanController {
             res.status(500).json({ success: false, message: 'Gagal mengambil data penyewaan.', error: (error as Error).message });
         }
     }
+    public async getLokasiBooth(req: Request, res: Response): Promise<void> {
+        try {
+            const data = await this.penyewaanService.getLokasiBooth();
+            res.status(200).json({ success: true, data });
+        } catch (error) {
+            res.status(500).json({ success: false, message: 'Gagal mengambil data Lokasi.', error: (error as Error).message });
+        }
+    }
     public async getPenyewaanByNik(req: Request, res: Response): Promise<void> {
         const { biodata_nik } = req.params;
         try {

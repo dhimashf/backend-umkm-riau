@@ -30,6 +30,10 @@ class PenyewaanService {
         const [rows] = await this.db.query<RowDataPacket[]>('SELECT * FROM penyewaan');
         return rows;
     }
+    public async getLokasiBooth(): Promise<RowDataPacket[]> {
+        const [rows] = await this.db.query<RowDataPacket[]>('SELECT b.nama,p.lokasi,p.booth_id_booth FROM penyewaan p,biodata b WHERE b.nik = p.biodata_nik');
+        return rows;
+    }
     public async getPenyewaanByNik(biodata_nik: string): Promise<RowDataPacket[]> {
         // Memastikan query menerima biodata_nik sebagai parameter
         const [rows] = await this.db.query<RowDataPacket[]>('SELECT * FROM penyewaan WHERE biodata_nik = ?', [biodata_nik]);
