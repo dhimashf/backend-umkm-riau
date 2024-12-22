@@ -3,7 +3,7 @@ import { RowDataPacket } from 'mysql2';
 import Database from '../config/database';
 
 interface Penyewaan {
-    id_sewa: string;
+    id_sewa: number;
     mulai_sewa: Date;
     akhir_sewa: Date;
     lokasi: string;
@@ -36,15 +36,15 @@ class PenyewaanService {
         return rows;
     }
 
-    public async updatePenyewaan(id_sewa: string, penyewaan: Partial<Penyewaan>): Promise<boolean> {
-        const { mulai_sewa, akhir_sewa, status, booth_id_booth } = penyewaan;
+    public async updatePenyewaan(biodata_nik: string, penyewaan: Partial<Penyewaan>): Promise<boolean> {
+        const { mulai_sewa, akhir_sewa,  status, booth_id_booth} = penyewaan;
     
         // Query SQL memerlukan nilai individu untuk setiap kolom
         const [result]: any = await this.db.query(
             `UPDATE penyewaan 
-             SET mulai_sewa = ?, akhir_sewa = ?, status = ?, booth_id_booth = ?, 
-             WHERE id_sewa = ?`,
-            [mulai_sewa, akhir_sewa, status, booth_id_booth, id_sewa]
+SET mulai_sewa = ?, akhir_sewa = ?, status = ?, booth_id_booth = ? WHERE biodata_nik = ?
+`,
+            [mulai_sewa, akhir_sewa,  status, booth_id_booth, biodata_nik]
         );
     
         return result.affectedRows > 0;
