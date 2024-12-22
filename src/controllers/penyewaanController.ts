@@ -57,7 +57,7 @@ class PenyewaanController {
         }
     }
     public async updatePenyewaan(req: Request, res: Response): Promise<void> {
-        const { biodata_nik } = req.body;
+        const { biodata_nik } = req.params;
         const { mulai_sewa, akhir_sewa, status, booth_id_booth } = req.body;
         try {
             await this.penyewaanService.updatePenyewaan(biodata_nik, { mulai_sewa, akhir_sewa, status, booth_id_booth });
