@@ -11,7 +11,7 @@ import penyewaanRoutes from './routes/penyewaanRoutes';
 import kreditRoutes from './routes/kreditRoutes';
 import produkPembelianRoutes from './routes/produkPembelianRoutes';
 import buktiPembayaranRoutes from './routes/buktiPembayaranRoutes';
-import bayarSewaRoutes from './routes/bayarsewaRoutes';
+import bayarSewaRoutes from './routes/bayarSewaRoutes';
 import PemantauanBisnisRoutes from './routes/pemantauanBisnisRoutes';
 dotenv.config();
 
