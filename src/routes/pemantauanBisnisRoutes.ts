@@ -4,7 +4,8 @@ import PemantauanBisnisController from '../controllers/pemantauanBisnisControlle
 const PemantauanBisnisRoutes = Router();
 const controller = new PemantauanBisnisController();
 
-PemantauanBisnisRoutes.get('/', controller.getTotalPendapatanBulanIni.bind(controller));
+PemantauanBisnisRoutes.get('/pendapatan', controller.getTotalPendapatanBulanIni.bind(controller));
+PemantauanBisnisRoutes.get('/all', controller.getPenyewaanBiodata.bind(controller));
 
 
 export default PemantauanBisnisRoutes;
