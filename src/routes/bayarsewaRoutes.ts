@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import BayarSewaController from '../controllers/bayarsewaController';  
+import BayarSewaController from '../controllers/bayarSewaController';  
 import { upload } from '../middlewares/uploadMiddleware'; // Middleware Multer khusus untuk Cloudinary
 
 const bayarSewaRoutes = Router();
