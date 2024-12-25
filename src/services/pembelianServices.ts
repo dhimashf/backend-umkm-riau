@@ -54,8 +54,6 @@ class PembelianService {
         }
     }
 
-
-
     public async getPembelianByJenisPembayaran(jenis_pembayaran: 'CASH' | 'CREDIT'): Promise<Pembelian[]> {
         const [rows] = await this.db.query<RowDataPacket[]>(
             'SELECT * FROM pembelian WHERE jenis_pembayaran = ?',
