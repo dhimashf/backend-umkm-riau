@@ -6,6 +6,7 @@ const controller = new produkPembelianController();
 
 produkPembelianRoutes.post('/', controller.addBarangCash.bind(controller));
 produkPembelianRoutes.get('/', controller.getAllProdukPembelian.bind(controller));
+produkPembelianRoutes.get('/:id_pembelian', controller.getProdukByPembelian.bind(controller));
 
 
 export default produkPembelianRoutes;
