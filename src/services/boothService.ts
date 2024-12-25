@@ -1,4 +1,4 @@
-import { RowDataPacket } from 'mysql2';
+import { RowDataPacket, ResultSetHeader } from 'mysql2';
 import Database from '../config/database';
 
 interface Booth {
@@ -75,6 +75,12 @@ class BoothService {
         const [rows] = await this.db.query<RowDataPacket[]>('SELECT * FROM riwayat_kerusakan WHERE id_booth = ?', [id_booth]);
         return rows as Kerusakan[];
     }
+    // BoothService.ts
+    public async deleteKerusakan(id: number): Promise<boolean> {
+        const [result] = await this.db.query<ResultSetHeader>('DELETE FROM riwayat_kerusakan WHERE id = ?', [id]);
+        return result.affectedRows > 0; // Menggunakan result yang bertipe ResultSetHeader
+    }
+
 }
 
 export default BoothService;

@@ -194,6 +194,33 @@ class BoothController {
             });
         }
     }
+    // BoothController.ts
+public async deleteKerusakan(req: Request, res: Response): Promise<void> {
+    const { id } = req.params;
+
+    try {
+        const deleted = await this.boothService.deleteKerusakan(Number(id));
+        if (!deleted) {
+            res.status(404).json({
+                success: false,
+                message: 'Kerusakan tidak ditemukan.',
+            });
+            return;
+        }
+
+        res.status(200).json({
+            success: true,
+            message: 'Kerusakan berhasil dihapus.',
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Gagal menghapus kerusakan.',
+            error: (error as Error).message,
+        });
+    }
+}
+
 }
 
 export default BoothController;

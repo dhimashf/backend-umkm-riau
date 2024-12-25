@@ -31,4 +31,7 @@ boothRoutes.get('/kerusakan/riwayat', controller.getAllKerusakan.bind(controller
 // Route untuk mendapatkan kerusakan berdasarkan ID booth
 boothRoutes.get('/kerusakan/:id_booth', controller.getKerusakanById.bind(controller));
 
+// boothRoutes.ts
+boothRoutes.delete('/kerusakan/:id', controller.deleteKerusakan.bind(controller));
+
 export default boothRoutes;
