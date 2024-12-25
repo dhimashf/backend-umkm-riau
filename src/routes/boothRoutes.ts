@@ -29,7 +29,7 @@ boothRoutes.post('/kerusakan', controller.addKerusakan.bind(controller));
 boothRoutes.get('/riwayat/kerusakan', controller.getAllKerusakan.bind(controller));
 
 // Route untuk mendapatkan kerusakan berdasarkan ID booth
-boothRoutes.get('/kerusakan/:id_booth', controller.getKerusakanById.bind(controller));
+boothRoutes.get('/riwayat/kerusakan/:id_booth', controller.getKerusakanById.bind(controller));
 
 // boothRoutes.ts
 boothRoutes.delete('/kerusakan/:id', controller.deleteKerusakan.bind(controller));
