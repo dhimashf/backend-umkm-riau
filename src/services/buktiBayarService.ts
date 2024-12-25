@@ -21,8 +21,7 @@ class BuktiBayarService {
 
     public async addBuktiBayar(buktiBayar: BuktiBayar, filePath: string): Promise<boolean> {
         try {
-                
-                    // Upload file ke Cloudinary satu kali
+                // Upload file ke Cloudinary satu kali
                     const uploadResponse = await cloudinary.uploader.upload(filePath, {
                         folder: 'products',
                     });

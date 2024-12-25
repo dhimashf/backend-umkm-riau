@@ -21,27 +21,27 @@ class BayarSewaService {
 
     public async addBayarSewa(BayarSewa: BayarSewa, filePath: string): Promise<boolean> {
         try {
-                
-                    // Upload file ke Cloudinary satu kali
-                    const uploadResponse = await cloudinary.uploader.upload(filePath, {
-                        folder: 'products',
-                    });
             
-                    // Dapatkan public_id dari Cloudinary
-                    const sewaPublicId = uploadResponse.secure_url; // Mengambil URL lengkap yang dihasilkan oleh Cloudinary
-                    const {id_sewa, tanggal, jumlah } = BayarSewa;
-            
-                    // Simpan data ke database, termasuk public_id
-                    await this.db.query(
-                        'INSERT INTO bayar_sewa (id_sewa, tanggal, bukti, jumlah) VALUES (?, ?, ?, ?)',
-                        [id_sewa, tanggal, sewaPublicId, jumlah]
-                    );
-            
-                    return true; // Berhasil
-                } catch (error) {
-                    console.error('Error adding credit sewa:', error);
-                    return false; // Gagal
-                }
+                // Upload file ke Cloudinary satu kali
+                const uploadResponse = await cloudinary.uploader.upload(filePath, {
+                    folder: 'products',
+                });
+        
+                // Dapatkan public_id dari Cloudinary
+                const sewaPublicId = uploadResponse.secure_url; // Mengambil URL lengkap yang dihasilkan oleh Cloudinary
+                const {id_sewa, tanggal, jumlah } = BayarSewa;
+        
+                // Simpan data ke database, termasuk public_id
+                await this.db.query(
+                    'INSERT INTO bayar_sewa (id_sewa, tanggal, bukti, jumlah) VALUES (?, ?, ?, ?)',
+                    [id_sewa, tanggal, sewaPublicId, jumlah]
+                );
+        
+                return true; // Berhasil
+            } catch (error) {
+                console.error('Error adding credit sewa:', error);
+                return false; // Gagal
+            }
         }
 
     public async getBayarSewaBysewaId(id_sewa: number): Promise<RowDataPacket[]> {
