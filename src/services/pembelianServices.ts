@@ -1,8 +1,8 @@
 import { RowDataPacket } from 'mysql2';
 import Database from '../config/database';
+import cloudinary from '../config/cloudinary';
 
 interface Pembelian {
-    id: string;
     tanggal_transaksi: Date;
     jenis_pembayaran: 'CASH' | 'CREDIT';
     nama: string;
@@ -29,30 +29,30 @@ class PembelianService {
             [ tanggal_transaksi,jenis_pembayaran, nama, alamat, no_hp, jenis_kelamin]
         );
     }
-    // public async addPembelianCredit(pemmbelian: Pembelian, filePath: string): Promise<boolean> {
-    //     try {
+    public async addPembelianCredit(pembelian: Pembelian, filePath: string): Promise<boolean> {
+        try {
            
-    //         // Upload file ke Cloudinary satu kali
-    //         const uploadResponse = await cloudinary.uploader.upload(filePath, {
-    //             folder: 'products',
-    //         });
+            // Upload file ke Cloudinary satu kali
+            const uploadResponse = await cloudinary.uploader.upload(filePath, {
+                folder: 'products',
+            });
     
-    //         // Dapatkan public_id dari Cloudinary
-    //         const fotoPublicId = uploadResponse.secure_url; // Mengambil URL lengkap yang dihasilkan oleh Cloudinary
-    //         const { jenis, ukuran, harga, deskripsi } = pembelian;
+            // Dapatkan public_id dari Cloudinary
+            const fotoKTP = uploadResponse.secure_url; // Mengambil URL lengkap yang dihasilkan oleh Cloudinary
+            const { tanggal_transaksi,jenis_pembayaran, nama, alamat, no_hp, jenis_kelamin,alamat_domisili, nik, tenor } = pembelian;
     
-    //         // Simpan data ke database, termasuk public_id
-    //         await this.db.query(
-    //             'INSERT INTO dokumentasi (jenis, ukuran, harga, foto, deskripsi) VALUES (?, ?, ?, ?, ?)',
-    //             [ jenis, ukuran, harga, fotoPublicId,deskripsi]
-    //         );
+            // Simpan data ke database, termasuk public_id
+            await this.db.query(
+                'INSERT INTO pembelian (tanggal_transaksi,jenis_pembayaran, nama, alamat, no_hp, jenis_kelamin, alamat_domisili, nik, tenor, foto_ktp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                [ tanggal_transaksi,jenis_pembayaran, nama, alamat, no_hp, jenis_kelamin,alamat_domisili, nik, tenor, fotoKTP]
+            );
     
-    //         return true; // Berhasil
-    //     } catch (error) {
-    //         console.error('Error adding dokumentasi:', error);
-    //         return false; // Gagal
-    //     }
-    // }
+            return true; // Berhasil
+        } catch (error) {
+            console.error('Error adding credit pembelian:', error);
+            return false; // Gagal
+        }
+    }
 
 
 
