@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import BayarSewaService from '../services/bayarSewaService';
+import BayarSewaService from '../services/bayarsewaService';
 
 class BayarSewaController {
     private BayarSewaService = new BayarSewaService();
