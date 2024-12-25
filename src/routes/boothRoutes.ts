@@ -32,6 +32,6 @@ boothRoutes.get('/riwayat/kerusakan', controller.getAllKerusakan.bind(controller
 boothRoutes.get('/riwayat/kerusakan/:id_booth', controller.getKerusakanById.bind(controller));
 
 // boothRoutes.ts
-boothRoutes.delete('/kerusakan/:id', controller.deleteKerusakan.bind(controller));
+boothRoutes.delete('/riwayat/kerusakan/:id', controller.deleteKerusakan.bind(controller));
 
 export default boothRoutes;
