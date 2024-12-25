@@ -3,9 +3,7 @@ import Database from '../config/database';
 
 interface Pembelian {
     id: string;
-    jenis_produk: string;
-    ukuran: string;
-    harga: string;
+    tanggal_transaksi: Date;
     jenis_pembayaran: 'CASH' | 'CREDIT';
     nama: string;
     alamat: string;
@@ -14,7 +12,7 @@ interface Pembelian {
     alamat_domisili?: string | null;
     nik?: string | null;
     tenor?: string | null;
-    foto_ktp?: Buffer | null;
+    foto_ktp?: string | null;
 }
 
 class PembelianService {
@@ -24,25 +22,39 @@ class PembelianService {
         const [rows] = await this.db.query<RowDataPacket[]>('SELECT * FROM pembelian');
         return rows as Pembelian[];
     }
-
-    public async addPembelian(pembelian: Pembelian): Promise<void> {
-        const {
-            id, jenis_produk, ukuran, harga, jenis_pembayaran,
-            nama, alamat, no_hp, jenis_kelamin, alamat_domisili, nik, tenor, foto_ktp
-        } = pembelian;
+    public async addPembelianCash(pembelian: Pembelian): Promise<void> {
+        const { tanggal_transaksi,jenis_pembayaran, nama, alamat, no_hp, jenis_kelamin} = pembelian;
         await this.db.query(
-            'INSERT INTO pembelian (id, jenis_produk, ukuran, harga, jenis_pembayaran, nama, alamat, no_hp, jenis_kelamin, alamat_domisili, nik, tenor, foto_ktp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-            [id, jenis_produk, ukuran, harga, jenis_pembayaran, nama, alamat, no_hp, jenis_kelamin, alamat_domisili, nik, tenor, foto_ktp]
+            'INSERT INTO pembelian (tanggal_transaksi,jenis_pembayaran, nama, alamat, no_hp, jenis_kelamin) VALUES ( ?, ?, ?, ?, ?, ?)',
+            [ tanggal_transaksi,jenis_pembayaran, nama, alamat, no_hp, jenis_kelamin]
         );
     }
+    // public async addPembelianCredit(pemmbelian: Pembelian, filePath: string): Promise<boolean> {
+    //     try {
+           
+    //         // Upload file ke Cloudinary satu kali
+    //         const uploadResponse = await cloudinary.uploader.upload(filePath, {
+    //             folder: 'products',
+    //         });
+    
+    //         // Dapatkan public_id dari Cloudinary
+    //         const fotoPublicId = uploadResponse.secure_url; // Mengambil URL lengkap yang dihasilkan oleh Cloudinary
+    //         const { jenis, ukuran, harga, deskripsi } = pembelian;
+    
+    //         // Simpan data ke database, termasuk public_id
+    //         await this.db.query(
+    //             'INSERT INTO dokumentasi (jenis, ukuran, harga, foto, deskripsi) VALUES (?, ?, ?, ?, ?)',
+    //             [ jenis, ukuran, harga, fotoPublicId,deskripsi]
+    //         );
+    
+    //         return true; // Berhasil
+    //     } catch (error) {
+    //         console.error('Error adding dokumentasi:', error);
+    //         return false; // Gagal
+    //     }
+    // }
 
-    public async updatePembelian(id: string, pembelian: Partial<Pembelian>): Promise<boolean> {
-        const [result]: any = await this.db.query(
-            'UPDATE pembelian SET ? WHERE id = ?',
-            [pembelian, id]
-        );
-        return result.affectedRows > 0;
-    }
+
 
     public async getPembelianByJenisPembayaran(jenis_pembayaran: 'CASH' | 'CREDIT'): Promise<Pembelian[]> {
         const [rows] = await this.db.query<RowDataPacket[]>(

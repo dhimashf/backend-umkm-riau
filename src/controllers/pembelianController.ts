@@ -20,50 +20,25 @@ class PembelianController {
         }
     }
 
-    public async addPembelian(req: Request, res: Response): Promise<void> {
+    public async addPembelianCash(req: Request, res: Response): Promise<void> {
         const pembelian = req.body;
 
         try {
-            await this.pembelianService.addPembelian(pembelian);
+            await this.pembelianService.addPembelianCash(pembelian);
             res.status(201).json({
                 success: true,
-                message: 'Pembelian added successfully.',
+                message: 'Pembelian Cash added successfully.',
             });
         } catch (error) {
             res.status(500).json({
                 success: false,
-                message: 'Failed to add pembelian.',
+                message: 'Failed to add Pembelian cash.',
                 error: (error as Error).message,
             });
         }
     }
 
-    public async updatePembelian(req: Request, res: Response): Promise<void> {
-        const { id } = req.params;
-        const pembelian = req.body;
 
-        try {
-            const updated = await this.pembelianService.updatePembelian(id, pembelian);
-            if (!updated) {
-                res.status(404).json({
-                    success: false,
-                    message: 'Pembelian not found.',
-                });
-                return;
-            }
-
-            res.status(200).json({
-                success: true,
-                message: 'Pembelian updated successfully.',
-            });
-        } catch (error) {
-            res.status(500).json({
-                success: false,
-                message: 'Failed to update pembelian.',
-                error: (error as Error).message,
-            });
-        }
-    }
 
     public async getPembelianByJenisPembayaran(req: Request, res: Response): Promise<void> {
     const { jenis_pembayaran } = req.params;

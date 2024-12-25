@@ -6,7 +6,6 @@ const controller = new PembelianController();
 
 pembelianRoutes.get('/', controller.getAllPembelian.bind(controller));
 pembelianRoutes.get('/:jenis_pembayaran', controller.getPembelianByJenisPembayaran.bind(controller));
-pembelianRoutes.post('/', controller.addPembelian.bind(controller));
-pembelianRoutes.put('/:id', controller.updatePembelian.bind(controller));
+pembelianRoutes.post('/cash', controller.addPembelianCash.bind(controller));
 
 export default pembelianRoutes;

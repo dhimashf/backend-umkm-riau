@@ -62,10 +62,10 @@ class BoothController {
     }
 
     public async addBooth(req: Request, res: Response): Promise<void> {
-        const { id_booth, ukuran, status, harga_sewa, riwayat_kerusakan } = req.body;
+        const { id_booth, ukuran, status, harga_sewa } = req.body;
 
         try {
-            await this.boothService.createBooth({ id_booth, ukuran, status, harga_sewa, riwayat_kerusakan });
+            await this.boothService.createBooth({ id_booth, ukuran, status, harga_sewa });
             res.status(201).json({
                 success: true,
                 message: 'Booth added successfully.',
@@ -81,10 +81,10 @@ class BoothController {
 
     public async updateBooth(req: Request, res: Response): Promise<void> {
         const { id_booth } = req.params;
-        const { ukuran, status, harga_sewa, riwayat_kerusakan } = req.body;
+        const { ukuran, status, harga_sewa } = req.body;
 
         try {
-            const updated = await this.boothService.updateBooth(id_booth, { ukuran, status, harga_sewa, riwayat_kerusakan });
+            const updated = await this.boothService.updateBooth(id_booth, { ukuran, status, harga_sewa });
             if (!updated) {
                 res.status(404).json({
                     success: false,
@@ -127,6 +127,69 @@ class BoothController {
             res.status(500).json({
                 success: false,
                 message: 'Failed to delete booth.',
+                error: (error as Error).message,
+            });
+        }
+    }
+
+    //kerusakan
+    // Menambahkan kerusakan ke booth
+    public async addKerusakan(req: Request, res: Response): Promise<void> {
+        const { id_booth, tanggal_kerusakan, riwayat_kerusakan } = req.body;
+
+        try {
+            await this.boothService.addKerusakan(id_booth, tanggal_kerusakan, riwayat_kerusakan);
+            res.status(201).json({
+                success: true,
+                message: 'Kerusakan added successfully.',
+            });
+        } catch (error) {
+            res.status(500).json({
+                success: false,
+                message: 'Failed to add kerusakan.',
+                error: (error as Error).message,
+            });
+        }
+    }
+
+    // Mendapatkan semua kerusakan
+    public async getAllKerusakan(req: Request, res: Response): Promise<void> {
+        try {
+            const kerusakan = await this.boothService.getAllKerusakan();
+            res.status(200).json({
+                success: true,
+                data: kerusakan,
+            });
+        } catch (error) {
+            res.status(500).json({
+                success: false,
+                message: 'Failed to fetch kerusakan.',
+                error: (error as Error).message,
+            });
+        }
+    }
+
+    // Mendapatkan kerusakan berdasarkan ID booth
+    public async getKerusakanById(req: Request, res: Response): Promise<void> {
+        const { id_booth } = req.params;
+        try {
+            const kerusakan = await this.boothService.getKerusakanById(id_booth);
+            if (!kerusakan) {
+                res.status(404).json({
+                    success: false,
+                    message: 'Kerusakan not found.',
+                });
+                return;
+            }
+
+            res.status(200).json({
+                success: true,
+                data: kerusakan,
+            });
+        } catch (error) {
+            res.status(500).json({
+                success: false,
+                message: 'Failed to fetch kerusakan.',
                 error: (error as Error).message,
             });
         }
