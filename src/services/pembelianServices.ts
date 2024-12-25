@@ -61,6 +61,13 @@ class PembelianService {
         );
         return rows as Pembelian[];
     }
+    public async getPembelianById(id: number): Promise<Pembelian[]> {
+        const [rows] = await this.db.query<RowDataPacket[]>(
+            'SELECT * FROM pembelian WHERE id = ?',
+            [id]
+        );
+        return rows as Pembelian[];
+    }
     
 }
 

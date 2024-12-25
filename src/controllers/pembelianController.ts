@@ -144,6 +144,24 @@ class PembelianController {
         });
     }
 }
+    public async getPembelianById(req: Request, res: Response): Promise<void> {
+    const { id } = req.params;
+    const { jenis_pembayaran } = req.params;
+
+    try {
+        const pembelians = await this.pembelianService.getPembelianById(Number(id));
+        res.status(200).json({
+            success: true,
+            data: pembelians,
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Failed to fetch pembelian data by id pembelian.',
+            error: (error as Error).message,
+        });
+    }
+}
 
 }
 
