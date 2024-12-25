@@ -19,10 +19,12 @@ class PenyewaanService {
     private db = Database.getInstance().getConnection();
 
     public async addPenyewaan(penyewaan: Penyewaan): Promise<void> {
-        const {  mulai_sewa, akhir_sewa, lokasi, status, biodata_nik, durasi } = penyewaan;
+        const { mulai_sewa, akhir_sewa, lokasi, biodata_nik, durasi } = penyewaan;
+        const status = 'MENUNGGU'; // Menetapkan status default
+        
         await this.db.query(
-            'INSERT INTO penyewaan (mulai_sewa, akhir_sewa, lokasi, status, biodata_nik, durasi) VALUES ( ?, ?, ?, ?, ?, ?)',
-            [ mulai_sewa, akhir_sewa, lokasi, status, biodata_nik, durasi]
+            'INSERT INTO penyewaan (mulai_sewa, akhir_sewa, lokasi, status, biodata_nik, durasi) VALUES (?, ?, ?, ?, ?, ?)',
+            [mulai_sewa, akhir_sewa, lokasi, status, biodata_nik, durasi]
         );
     }
 
