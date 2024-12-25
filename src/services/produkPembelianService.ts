@@ -13,10 +13,19 @@ interface ProdukPembelian {
 class ProdukPembelianService {
     private db = Database.getInstance().getConnection();
 
-    public async getAllProdukPembelian(): Promise<ProdukPembelian[]> {
+    public async getAllProdukPembelian(): Promise<{ data: ProdukPembelian[]; totalJumlah: number }> {
         const [rows] = await this.db.query<RowDataPacket[]>('SELECT * FROM produk_pembelian');
-        return rows as ProdukPembelian[];
+        
+        // Menghitung total jumlah
+        const totalJumlah = rows.reduce((total, row) => total + row.jumlah, 0);
+        
+        // Mengembalikan daftar produk dan total jumlah
+        return {
+            data: rows as ProdukPembelian[],
+            totalJumlah,
+        };
     }
+    
     /**
      * Tambahkan produk ke tabel produk_pembelian
      * @param produkPembelian Data produk yang akan ditambahkan
