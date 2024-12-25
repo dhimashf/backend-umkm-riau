@@ -19,28 +19,20 @@ class ProdukPembelianController {
         }
     }
     public async getProdukByPembelian(req: Request, res: Response): Promise<void> {
-        const { id_pembelian } = req.params;  // Mendapatkan id_pembelian dari parameter
+        const { id_pembelian } = req.params;
     
         try {
-            // Memanggil service untuk mengambil produk berdasarkan id_pembelian
-            const produkPembelian = await this.produkPembelianService.getProdukByPembelian(Number(id_pembelian));
-    
-            if (produkPembelian.length === 0) {
-                res.status(404).json({
-                    success: false,
-                    message: 'Produk pembelian tidak ditemukan.',
-                });
-                return;
-            }
+            const { produk, totalTransaksi } = await this.produkPembelianService.getProdukByPembelian(Number(id_pembelian));
     
             res.status(200).json({
                 success: true,
-                data: produkPembelian,
+                data: produk,
+                totalTransaksi,
             });
         } catch (error) {
             res.status(500).json({
                 success: false,
-                message: 'Failed to fetch produk pembelian data.',
+                message: 'Gagal mengambil data produk pembelian.',
                 error: (error as Error).message,
             });
         }

@@ -54,13 +54,22 @@ class ProdukPembelianService {
      * @param id_pembelian ID pembelian
      * @returns Daftar produk pembelian
      */
-    public async getProdukByPembelian(id_pembelian: number): Promise<ProdukPembelian[]> {
+    public async getProdukByPembelian(id_pembelian: number): Promise<{ produk: ProdukPembelian[], totalTransaksi: number }> {
         const [rows] = await this.db.query<RowDataPacket[]>(
             'SELECT * FROM produk_pembelian WHERE id_pembelian = ?',
             [id_pembelian]
         );
-        return rows as ProdukPembelian[];
+        
+        // Menghitung total transaksi
+        const produk = rows as ProdukPembelian[];
+        const totalTransaksi = produk.reduce((total, item) => total + (item.harga * item.jumlah), 0);
+    
+        return {
+            produk, // Daftar produk pembelian
+            totalTransaksi, // Total transaksi
+        };
     }
+    
 }
 
 export default ProdukPembelianService;
