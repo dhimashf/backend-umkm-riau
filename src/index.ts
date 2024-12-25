@@ -12,7 +12,7 @@ import kreditRoutes from './routes/kreditRoutes';
 import produkPembelianRoutes from './routes/produkPembelianRoutes';
 import buktiPembayaranRoutes from './routes/buktiPembayaranRoutes';
 import PemantauanBisnisRoutes from './routes/pemantauanBisnisRoutes';
-import bayarSewaRoutes from './routes/bayarsewaRoutes';
+import bayarSewaRoutes from './routes/bayarSewaRoutes';
 dotenv.config();
 
 class App {

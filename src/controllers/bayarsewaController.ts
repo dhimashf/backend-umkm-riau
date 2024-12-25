@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import BayarSewaService from '../services/bayarsewaService';
+import BayarSewaService from '../services/bayarSewaService';
 
-class BayarSewaController {
+class bayarSewaController {
     private BayarSewaService = new BayarSewaService();
 
     // Get all bukti bayar
@@ -128,4 +128,4 @@ class BayarSewaController {
     }
 }
 
-export default BayarSewaController;
+export default bayarSewaController;
