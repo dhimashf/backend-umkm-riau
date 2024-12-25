@@ -86,6 +86,8 @@ class BoothService {
         return result.affectedRows > 0; // Menggunakan result yang bertipe ResultSetHeader
     }
 
+    
+
 }
 
 export default BoothService;

@@ -43,17 +43,39 @@ class PenyewaanService {
     }
 
     public async updatePenyewaan(biodata_nik: string, penyewaan: Partial<Penyewaan>): Promise<boolean> {
-        const { mulai_sewa, akhir_sewa,  status, booth_id_booth} = penyewaan;
+        const { mulai_sewa, akhir_sewa, status, booth_id_booth } = penyewaan;
     
-        // Query SQL memerlukan nilai individu untuk setiap kolom
-        const [result]: any = await this.db.query(
-            `UPDATE penyewaan 
-SET mulai_sewa = ?, akhir_sewa = ?, status = ?, booth_id_booth = ? WHERE biodata_nik = ?
-`,
-            [mulai_sewa, akhir_sewa,  status, booth_id_booth, biodata_nik]
-        );
+        const connection = await this.db.getConnection(); // Menggunakan transaksi untuk konsistensi
+        try {
+            await connection.beginTransaction();
     
-        return result.affectedRows > 0;
+            // Update penyewaan
+            const [result]: any = await connection.query(
+                `UPDATE penyewaan 
+                 SET mulai_sewa = ?, akhir_sewa = ?, status = ?, booth_id_booth = ? 
+                 WHERE biodata_nik = ?`,
+                [mulai_sewa, akhir_sewa, status, booth_id_booth, biodata_nik]
+            );
+    
+            if (result.affectedRows > 0 && booth_id_booth) {
+                // Update status booth menjadi 'DISEWA'
+                await connection.query(
+                    `UPDATE booth 
+                     SET status = 'DISEWA' 
+                     WHERE id_booth = ?`,
+                    [booth_id_booth]
+                );
+            }
+    
+            await connection.commit();
+            return true;
+        } catch (error) {
+            await connection.rollback();
+            console.error('Error updating penyewaan and booth status:', error);
+            return false;
+        } finally {
+            connection.release();
+        }
     }
     
     public async hapusPenyewaan(id_sewa: string): Promise<boolean> {
