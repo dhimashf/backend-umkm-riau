@@ -45,7 +45,7 @@ class PemantauanBisnisService {
                 (SELECT COALESCE(kerusakan.riwayat_kerusakan, 'Tidak ada riwayat kerusakan.') 
                  FROM riwayat_kerusakan kerusakan
                  WHERE kerusakan.id_booth = p.booth_id_booth 
-                 ORDER BY kerusakan.tanggal_kerusakan ) AS riwayat_kerusakan
+                 ORDER BY kerusakan.tanggal_kerusakan DESC LIMIT 5) AS riwayat_kerusakan
             FROM 
                 penyewaan p
             JOIN biodata b ON p.biodata_nik = b.nik
