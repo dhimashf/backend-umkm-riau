@@ -1,10 +1,9 @@
 import { Request, Response } from 'express';
-import BayarSewaService from '../services/bayarSewaService';
+import BayarSewaService from '../services/bayarsewaService';
 
 class bayarSewaController {
     private BayarSewaService = new BayarSewaService();
 
-    // Get all bukti bayar
 // Get all bukti bayar
     public async getAllBayarSewa(req: Request, res: Response): Promise<void> {
       try {
