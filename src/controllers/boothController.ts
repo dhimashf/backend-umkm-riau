@@ -105,6 +105,32 @@ class BoothController {
             });
         }
     }
+    public async updateStatus(req: Request, res: Response): Promise<void> {
+        const { id_booth } = req.params;
+        const { status } = req.body;
+
+        try {
+            const updated = await this.boothService.updateBooth(id_booth, {status });
+            if (!updated) {
+                res.status(404).json({
+                    success: false,
+                    message: 'Booth not found.',
+                });
+                return;
+            }
+
+            res.status(200).json({
+                success: true,
+                message: 'Booth Status updated successfully.',
+            });
+        } catch (error) {
+            res.status(500).json({
+                success: false,
+                message: 'Failed to update Status booth.',
+                error: (error as Error).message,
+            });
+        }
+    }
 
     public async deleteBooth(req: Request, res: Response): Promise<void> {
         const { id_booth } = req.params;

@@ -49,6 +49,11 @@ class BoothService {
         const [result]: any = await this.db.query('UPDATE booth SET ukuran = ?, status = ?, harga_sewa = ? WHERE id_booth = ?', [ukuran, status, harga_sewa, id_booth]);
         return result.affectedRows > 0;
     }
+    public async updateStatus(id_booth: string, booth: Partial<Booth>): Promise<boolean> {
+        const { status} = booth;
+        const [result]: any = await this.db.query('UPDATE booth SET status = ? WHERE id_booth = ?', [status, id_booth]);
+        return result.affectedRows > 0;
+    }
 
     // Menghapus booth berdasarkan ID
     public async deleteBooth(id_booth: string): Promise<boolean> {
