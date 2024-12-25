@@ -19,7 +19,7 @@ class PembelianService {
     private db = Database.getInstance().getConnection();
 
     public async getAllPembelian(): Promise<Pembelian[]> {
-        const [rows] = await this.db.query<RowDataPacket[]>('SELECT * FROM pembelian');
+        const [rows] = await this.db.query<RowDataPacket[]>('SELECT * FROM pembelian ORDER BY id DESC');
         return rows as Pembelian[];
     }
     public async addPembelianCash(pembelian: Pembelian): Promise<void> {
