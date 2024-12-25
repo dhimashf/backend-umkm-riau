@@ -11,8 +11,8 @@ import penyewaanRoutes from './routes/penyewaanRoutes';
 import kreditRoutes from './routes/kreditRoutes';
 import produkPembelianRoutes from './routes/produkPembelianRoutes';
 import buktiPembayaranRoutes from './routes/buktiPembayaranRoutes';
-import bayarSewaRoutes from './routes/bayarSewaRoutes';
 import PemantauanBisnisRoutes from './routes/pemantauanBisnisRoutes';
+import bayarSewaRoutes from './routes/bayarSewaRoutes';
 dotenv.config();
 
 class App {
@@ -57,8 +57,8 @@ class App {
         this.app.use('/api/kredit', kreditRoutes);
         this.app.use('/api/produk', produkPembelianRoutes);
         this.app.use('/api/bukti', buktiPembayaranRoutes);
-        this.app.use('/api/sewa', bayarSewaRoutes);
         this.app.use('/api/pemantauan-bisnis', PemantauanBisnisRoutes);
+        this.app.use('/api/sewa', bayarSewaRoutes);
     }
 }
 
