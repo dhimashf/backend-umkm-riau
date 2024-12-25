@@ -25,7 +25,7 @@ class PemantauanBisnisService {
 
         return totalPendapatan;
     }
-    public async getPenyewaanBiodata(): Promise<any[]> {
+    public async getPenyewaanBiodataByBooth(id_booth: string): Promise<any[]> {
         const query = `
             SELECT 
                 b.nama, 
@@ -51,14 +51,14 @@ class PemantauanBisnisService {
             JOIN biodata b ON p.biodata_nik = b.nik
             JOIN booth bo ON p.booth_id_booth = bo.id_booth
             JOIN AKUN a ON b.akun_id_akun = a.id_akun  -- Menggabungkan tabel AKUN untuk mendapatkan no_hp
+            WHERE p.booth_id_booth = ?  
         `;
     
-        // Execute the query and get the result
-        const [rows]: any = await this.db.query(query);
+        // Execute the query with the id_booth parameter
+        const [rows]: any = await this.db.query(query, [id_booth]);
     
         return rows as RowDataPacket[]; // Cast the result to RowDataPacket[]
-    }
-        
+    }     
 }
 
 

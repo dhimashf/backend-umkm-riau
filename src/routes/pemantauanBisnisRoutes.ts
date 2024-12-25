@@ -5,7 +5,7 @@ const PemantauanBisnisRoutes = Router();
 const controller = new PemantauanBisnisController();
 
 PemantauanBisnisRoutes.get('/pendapatan', controller.getTotalPendapatanBulanIni.bind(controller));
-PemantauanBisnisRoutes.get('/all', controller.getPenyewaanBiodata.bind(controller));
+PemantauanBisnisRoutes.get('/all/:id_booth', controller.getPenyewaanBiodataByBooth.bind(controller));
 
 
 export default PemantauanBisnisRoutes;

@@ -23,17 +23,19 @@ class PemantauanBisnisController {
             });
         }
     }
-    public async getPenyewaanBiodata(req: Request, res: Response): Promise<void> {
+    public async getPenyewaanBiodataByBooth(req: Request, res: Response): Promise<void> {
+        const { id_booth } = req.params; // Mengambil id_booth dari parameter request
+
         try {
-            const penyewaanBiodata = await this.pemantauanBisnisService.getPenyewaanBiodata();
+            const data = await this.pemantauanBisnisService.getPenyewaanBiodataByBooth(id_booth);
             res.status(200).json({
                 success: true,
-                data: penyewaanBiodata,
+                data,
             });
         } catch (error) {
             res.status(500).json({
                 success: false,
-                message: 'Failed to fetch penyewaan biodata.',
+                message: 'Failed to fetch penyewaan data by booth.',
                 error: (error as Error).message,
             });
         }
