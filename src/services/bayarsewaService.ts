@@ -2,13 +2,13 @@ import { RowDataPacket } from 'mysql2';
 import Database from '../config/database';
 import cloudinary from '../config/cloudinary';
 
-interface BayarSewa {
-    id?: number;
-    id_sewa: number;
-    tanggal: string;
-    bukti: string;
-    jumlah: number;
-}
+    interface BayarSewa {
+        id?: number;
+        id_sewa: number;
+        tanggal: string;
+        bukti: string;
+        jumlah: number;
+    }
 
 
 class BayarSewaService {
