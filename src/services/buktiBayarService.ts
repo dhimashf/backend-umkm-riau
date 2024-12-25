@@ -21,27 +21,27 @@ class BuktiBayarService {
 
     public async addBuktiBayar(buktiBayar: BuktiBayar, filePath: string): Promise<boolean> {
         try {
-                // Upload file ke Cloudinary satu kali
-                    const uploadResponse = await cloudinary.uploader.upload(filePath, {
-                        folder: 'products',
-                    });
-            
-                    // Dapatkan public_id dari Cloudinary
-                    const buktiPublicId = uploadResponse.secure_url; // Mengambil URL lengkap yang dihasilkan oleh Cloudinary
-                    const {id_pembelian, tanggal, jumlah } = buktiBayar;
-            
-                    // Simpan data ke database, termasuk public_id
-                    await this.db.query(
-                        'INSERT INTO bukti_bayar (id_pembelian, tanggal, bukti, jumlah) VALUES (?, ?, ?, ?)',
-                        [id_pembelian, tanggal, buktiPublicId, jumlah]
-                    );
-            
-                    return true; // Berhasil
-                } catch (error) {
-                    console.error('Error adding credit pembelian:', error);
-                    return false; // Gagal
-                }
+        // Upload file ke Cloudinary satu kali
+            const uploadResponse = await cloudinary.uploader.upload(filePath, {
+                folder: 'products',
+            });
+    
+            // Dapatkan public_id dari Cloudinary
+            const buktiPublicId = uploadResponse.secure_url; // Mengambil URL lengkap yang dihasilkan oleh Cloudinary
+            const {id_pembelian, tanggal, jumlah } = buktiBayar;
+    
+            // Simpan data ke database, termasuk public_id
+            await this.db.query(
+                'INSERT INTO bukti_bayar (id_pembelian, tanggal, bukti, jumlah) VALUES (?, ?, ?, ?)',
+                [id_pembelian, tanggal, buktiPublicId, jumlah]
+            );
+    
+            return true; // Berhasil
+        } catch (error) {
+            console.error('Error adding credit pembelian:', error);
+            return false; // Gagal
         }
+    }
 
     public async getBuktiByPembelianId(id_pembelian: number): Promise<RowDataPacket[]> {
         const [rows] = await this.db.query<RowDataPacket[]>(
