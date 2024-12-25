@@ -4,10 +4,10 @@ import Database from '../config/database';
 interface ProdukPembelian {
     id?: number;
     id_pembelian: number;
+    jenis_produk:'MEJA' | 'ETALASE' | 'GEROBAK' | 'KURSI' | 'BOOTH'
     ukuran: string;
     harga: number;
     jumlah: number;
-    // Subtotal tidak perlu dimasukkan oleh user, akan dihitung otomatis
     }
 
 class ProdukPembelianService {
@@ -22,16 +22,23 @@ class ProdukPembelianService {
      * @param produkPembelian Data produk yang akan ditambahkan
      */
     public async addBarangCash(produkPembelian: ProdukPembelian): Promise<void> {
-        const { id_pembelian, ukuran, harga, jumlah } = produkPembelian;
-
+        const { id_pembelian, ukuran, harga, jumlah, jenis_produk } = produkPembelian;
+    
+        // Validasi input (jika diperlukan)
+        if (!id_pembelian || !ukuran || !harga || !jumlah || !jenis_produk) {
+            throw new Error('Semua field harus diisi');
+        }
+    
         // Hitung subtotal otomatis
         const subtotal = harga * jumlah;
-
+    
+        // Perbaikan pada query, pastikan jumlah nilai sesuai dengan jumlah kolom
         await this.db.query(
-            'INSERT INTO produk_pembelian (id_pembelian, ukuran, harga, jumlah, subtotal) VALUES (?, ?, ?, ?, ?)',
-            [id_pembelian, ukuran, harga, jumlah, subtotal]
+            'INSERT INTO produk_pembelian (id_pembelian, jenis_produk, ukuran, harga, jumlah, subtotal) VALUES (?, ?, ?, ?, ?, ?)',
+            [id_pembelian, jenis_produk, ukuran, harga, jumlah, subtotal]
         );
     }
+    
 
     /**
      * Mendapatkan semua produk berdasarkan id_pembelian

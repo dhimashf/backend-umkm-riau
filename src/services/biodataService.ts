@@ -62,9 +62,7 @@ class biodataService {
             throw error; // Lemparkan error agar ditangani di controller
         }
     }
-
-       
-    
+   
     public async updateBiodata(
         nik: string,
         biodata: Partial<Biodata>,

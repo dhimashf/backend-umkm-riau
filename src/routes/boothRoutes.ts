@@ -26,7 +26,7 @@ boothRoutes.delete('/:id_booth', controller.deleteBooth.bind(controller));
 boothRoutes.post('/kerusakan', controller.addKerusakan.bind(controller));
 
 // Route untuk mendapatkan semua kerusakan
-boothRoutes.get('/kerusakan/riwayat', controller.getAllKerusakan.bind(controller));
+boothRoutes.get('/riwayat/kerusakan', controller.getAllKerusakan.bind(controller));
 
 // Route untuk mendapatkan kerusakan berdasarkan ID booth
 boothRoutes.get('/kerusakan/:id_booth', controller.getKerusakanById.bind(controller));
