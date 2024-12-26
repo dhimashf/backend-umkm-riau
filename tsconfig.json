@@ -7,6 +7,7 @@
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
+    "resolveJsonModule": true,  // Tambahkan ini
     "forceConsistentCasingInFileNames": true
   },
   "include": ["src/**/*"],

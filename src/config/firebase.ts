@@ -1,22 +1,7 @@
-import admin from 'firebase-admin';
-import dotenv from 'dotenv';
+import * as serviceAccount from './warung-umkm-1410-firebase-adminsdk-pxzdk-e23d123355.json'; // Path ke private key Anda
 
-dotenv.config();
-
-// Firebase configuration for Node.js backend
-const firebaseConfig = {
-  apiKey: "API",  // Gantilah dengan apiKey Anda
-  authDomain: "WARUNG", // Gantilah dengan authDomain Anda
-  projectId: "warung",  // Gantilah dengan projectId Anda
-  storageBucket: "warung", // Gantilah dengan storageBucket Anda
-  messagingSenderId: "", // Gantilah dengan messagingSenderId Anda
-  appId: "1:", // Gantilah dengan appId Anda
-  measurementId: "GP", // Gantilah dengan measurementId Anda
+// Konfigurasi Firebase
+export const firebaseConfig = {
+  credential: serviceAccount,
+  databaseURL: 'https://warung-umkm-1410.firebaseio.com', // Ganti dengan URL database Firebase Anda
 };
-
-// Inisialisasi Firebase Admin SDK
-admin.initializeApp({
-  credential: admin.credential.cert(firebaseConfig), // Gunakan credential yang sesuai
-});
-
-export default admin;

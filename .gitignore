@@ -20,3 +20,5 @@ Thumbs.db
 
 # npm package-lock file (optional, if you want to ignore it)
 package-lock.json
+# .gitignore
+/config/warung-umkm-1410-firebase-adminsdk-pxzdk-e23d123355.json
