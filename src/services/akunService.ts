@@ -1,7 +1,6 @@
 import { RowDataPacket } from 'mysql2';
 import Database from '../config/database';
 import bcrypt from 'bcrypt';
-import FirebaseService from './firebaseService';
 
 interface Akun {
   id_akun?: number; // Tambahkan id_akun jika ada di database
@@ -63,25 +62,7 @@ public async register(akun: Pick<Akun, 'no_hp' | 'password'>): Promise<boolean> 
     if (!akun) return false;
     return bcrypt.compare(password, akun.password);
   }
-  public async sendOTP(no_hp: string): Promise<string> {
-    try {
-      // Use FirebaseService instance to send OTP
-      const otp = await FirebaseService.getInstance().sendOTP(no_hp);
-      return otp;
-    } catch (error) {
-      throw new Error('Failed to send OTP');
-    }
-  }
 
-  public async verifyOTP(no_hp: string, otp: string): Promise<boolean> {
-    try {
-      // Use FirebaseService instance to verify OTP
-      const isValid = await FirebaseService.getInstance().verifyOTP(no_hp, otp);
-      return isValid;
-    } catch (error) {
-      throw new Error('Invalid OTP');
-    }
-  }
   
 }
 

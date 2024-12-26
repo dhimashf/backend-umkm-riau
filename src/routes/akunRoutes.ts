@@ -12,8 +12,6 @@
     akunRoutes.post('/login', controller.login.bind(controller));
     akunRoutes.put('/lupa-password', controller.forgotPassword.bind(controller));
 
-    akunRoutes.post('/send-otp', controller.sendOTP.bind(controller)); // Rute untuk mengirim OTP
-    akunRoutes.post('/verify-otp', controller.verifyOTP.bind(controller)); // Rute untuk memverifikasi OTP
 
 
 

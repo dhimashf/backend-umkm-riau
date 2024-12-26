@@ -161,69 +161,6 @@ class AkunController {
         }
     }
 
-    public async sendOTP(req: Request, res: Response): Promise<void> {
-        const { no_hp } = req.body;
-    
-        if (!no_hp) {
-            res.status(400).json({ success: false, message: 'Nomor HP wajib diisi.' });
-            return;
-        }
-    
-        try {
-            const otp = await this.akunService.sendOTP(no_hp);
-            res.status(200).json({
-                success: true,
-                message: 'OTP berhasil dikirim.',
-                otp, // In a real scenario, you wouldn't send OTP in the response
-            });
-        } catch (error: unknown) {  // Use 'unknown' type for error
-            if (error instanceof Error) {  // Check if error is an instance of Error
-                res.status(500).json({
-                    success: false,
-                    message: 'Gagal mengirim OTP.',
-                    error: error.message, // Safely access 'message' property
-                });
-            } else {
-                res.status(500).json({
-                    success: false,
-                    message: 'Gagal mengirim OTP.',
-                    error: 'Unknown error occurred',
-                });
-            }
-        }
-    }
-    
-    public async verifyOTP(req: Request, res: Response): Promise<void> {
-        const { no_hp, otp } = req.body;
-    
-        if (!no_hp || !otp) {
-            res.status(400).json({ success: false, message: 'Nomor HP dan OTP wajib diisi.' });
-            return;
-        }
-    
-        try {
-            const isValid = await this.akunService.verifyOTP(no_hp, otp);
-            if (isValid) {
-                res.status(200).json({ success: true, message: 'OTP berhasil diverifikasi.' });
-            } else {
-                res.status(400).json({ success: false, message: 'OTP tidak valid.' });
-            }
-        } catch (error: unknown) {  // Use 'unknown' type for error
-            if (error instanceof Error) {  // Check if error is an instance of Error
-                res.status(500).json({
-                    success: false,
-                    message: 'Gagal memverifikasi OTP.',
-                    error: error.message, // Safely access 'message' property
-                });
-            } else {
-                res.status(500).json({
-                    success: false,
-                    message: 'Gagal memverifikasi OTP.',
-                    error: 'Unknown error occurred',
-                });
-            }
-        }
-    }
     
 }
 
