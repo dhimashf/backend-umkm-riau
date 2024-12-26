@@ -22,12 +22,14 @@ class PembelianController {
 
     public async addPembelianCash(req: Request, res: Response): Promise<void> {
         const pembelian = req.body;
-
+    
         try {
-            await this.pembelianService.addPembelianCash(pembelian);
+            const result = await this.pembelianService.addPembelianCash(pembelian);
+    
             res.status(201).json({
                 success: true,
                 message: 'Pembelian Cash added successfully.',
+                id: result.id,  // Menggunakan result.id untuk mengembalikan ID yang baru saja ditambahkan
             });
         } catch (error) {
             res.status(500).json({
@@ -37,53 +39,12 @@ class PembelianController {
             });
         }
     }
+    
 
     public async addPembelianCredit(req: Request, res: Response): Promise<void> {
-    try {
-        const { 
-            tanggal_transaksi,
-            jenis_pembayaran,
-            nama,
-            alamat,
-            no_hp,
-            jenis_kelamin,
-            alamat_domisili,
-            nik,
-            tenor 
-        } = req.body;
-
-        const filePath = req.file?.path; // Path file dari Multer
-
-        // Validasi input
-        if (
-            !tanggal_transaksi ||
-            !jenis_pembayaran ||
-            !nama ||
-            !alamat ||
-            !no_hp ||
-            !jenis_kelamin ||
-            !alamat_domisili ||
-            !nik ||
-            !tenor
-        ) {
-            res.status(400).json({
-                success: false,
-                message: 'Semua field harus diisi.',
-            });
-            return;
-        }
-
-        if (!filePath) {
-            res.status(400).json({
-                success: false,
-                message: 'File foto harus diunggah.',
-            });
-            return;
-        }
-
-        // Tambahkan pembelian credit menggunakan service
-        const isSuccess = await this.pembelianService.addPembelianCredit(
-            {tanggal_transaksi,
+        try {
+            const { 
+                tanggal_transaksi,
                 jenis_pembayaran,
                 nama,
                 alamat,
@@ -91,32 +52,79 @@ class PembelianController {
                 jenis_kelamin,
                 alamat_domisili,
                 nik,
-                tenor,
-                foto_ktp: '' // Akan diisi di service setelah upload ke Cloudinary
-            },
-            filePath
-        );
-
-        if (isSuccess) {
-            res.status(201).json({
-                success: true,
-                message: 'Pembelian credit berhasil ditambahkan.',
-            });
-        } else {
+                tenor 
+            } = req.body;
+    
+            const filePath = req.file?.path; // Path file dari Multer
+    
+            // Validasi input
+            if (
+                !tanggal_transaksi ||
+                !jenis_pembayaran ||
+                !nama ||
+                !alamat ||
+                !no_hp ||
+                !jenis_kelamin ||
+                !alamat_domisili ||
+                !nik ||
+                !tenor
+            ) {
+                res.status(400).json({
+                    success: false,
+                    message: 'Semua field harus diisi.',
+                });
+                return;
+            }
+    
+            if (!filePath) {
+                res.status(400).json({
+                    success: false,
+                    message: 'File foto harus diunggah.',
+                });
+                return;
+            }
+    
+            // Tambahkan pembelian credit menggunakan service
+            const newId = await this.pembelianService.addPembelianCredit(
+                { 
+                    tanggal_transaksi,
+                    jenis_pembayaran,
+                    nama,
+                    alamat,
+                    no_hp,
+                    jenis_kelamin,
+                    alamat_domisili,
+                    nik,
+                    tenor,
+                    foto_ktp: '' // Foto akan diisi di service setelah upload ke Cloudinary
+                },
+                filePath
+            );
+    
+            if (newId) {
+                res.status(201).json({
+                    success: true,
+                    message: 'Pembelian credit berhasil ditambahkan.',
+                    data: {
+                        id: newId, // Mengembalikan ID yang baru dimasukkan
+                    },
+                });
+            } else {
+                res.status(500).json({
+                    success: false,
+                    message: 'Gagal menambahkan pembelian credit.',
+                });
+            }
+        } catch (error) {
+            console.error('Error adding credit pembelian:', error);
             res.status(500).json({
                 success: false,
-                message: 'Gagal menambahkan pembelian credit.',
+                message: 'Internal server error saat menambahkan pembelian credit.',
+                error: (error as Error).message,
             });
         }
-    } catch (error) {
-        console.error('Error adding credit pembelian:', error);
-        res.status(500).json({
-            success: false,
-            message: 'Internal server error saat menambahkan pembelian credit.',
-            error: (error as Error).message,
-        });
     }
-}
+    
 
 
     public async getPembelianByJenisPembayaran(req: Request, res: Response): Promise<void> {
@@ -146,7 +154,6 @@ class PembelianController {
 }
     public async getPembelianById(req: Request, res: Response): Promise<void> {
     const { id } = req.params;
-    const { jenis_pembayaran } = req.params;
 
     try {
         const pembelians = await this.pembelianService.getPembelianById(Number(id));

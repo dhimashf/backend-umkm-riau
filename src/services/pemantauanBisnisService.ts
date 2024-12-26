@@ -41,15 +41,15 @@ class PemantauanBisnisService {
     GROUP_CONCAT(CONCAT('Tanggal: ', bayar_sewa.tanggal, ', Jumlah: Rp ', bayar_sewa.jumlah, ', Bukti: ', bayar_sewa.bukti) SEPARATOR ' | ') AS riwayat_pembayaran,
     -- Riwayat Kerusakan
     GROUP_CONCAT(DISTINCT COALESCE(kerusakan.riwayat_kerusakan, 'Tidak ada riwayat kerusakan.') ORDER BY kerusakan.tanggal_kerusakan DESC SEPARATOR ' | ') AS riwayat_kerusakan
-FROM 
-    penyewaan p
-JOIN biodata b ON p.biodata_nik = b.nik
-JOIN booth bo ON p.booth_id_booth = bo.id_booth
-JOIN AKUN a ON b.akun_id_akun = a.id_akun  -- Menggabungkan tabel AKUN untuk mendapatkan no_hp
-LEFT JOIN bayar_sewa ON bayar_sewa.id_sewa = p.id_sewa  -- Menggabungkan riwayat pembayaran
-LEFT JOIN riwayat_kerusakan kerusakan ON kerusakan.id_booth = p.booth_id_booth  -- Menggabungkan riwayat kerusakan
-WHERE p.booth_id_booth = ?
-GROUP BY p.id_sewa;  -- Pastikan mengelompokkan berdasarkan ID penyewaan
+    FROM 
+        penyewaan p
+    JOIN biodata b ON p.biodata_nik = b.nik
+    JOIN booth bo ON p.booth_id_booth = bo.id_booth
+    JOIN AKUN a ON b.akun_id_akun = a.id_akun  -- Menggabungkan tabel AKUN untuk mendapatkan no_hp
+    LEFT JOIN bayar_sewa ON bayar_sewa.id_sewa = p.id_sewa  -- Menggabungkan riwayat pembayaran
+    LEFT JOIN riwayat_kerusakan kerusakan ON kerusakan.id_booth = p.booth_id_booth  -- Menggabungkan riwayat kerusakan
+    WHERE p.booth_id_booth = ?
+    GROUP BY p.id_sewa;  -- Pastikan mengelompokkan berdasarkan ID penyewaan
 
   
         `;

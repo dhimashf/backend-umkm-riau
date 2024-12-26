@@ -3,6 +3,7 @@ import Database from '../config/database';
 import cloudinary from '../config/cloudinary';
 
 interface Pembelian {
+    id?: number;
     tanggal_transaksi: Date;
     jenis_pembayaran: 'CASH' | 'CREDIT';
     nama: string;
@@ -22,37 +23,51 @@ class PembelianService {
         const [rows] = await this.db.query<RowDataPacket[]>('SELECT * FROM pembelian ORDER BY id DESC');
         return rows as Pembelian[];
     }
-    public async addPembelianCash(pembelian: Pembelian): Promise<void> {
-        const { tanggal_transaksi,jenis_pembayaran, nama, alamat, no_hp, jenis_kelamin} = pembelian;
-        await this.db.query(
-            'INSERT INTO pembelian (tanggal_transaksi,jenis_pembayaran, nama, alamat, no_hp, jenis_kelamin) VALUES ( ?, ?, ?, ?, ?, ?)',
-            [ tanggal_transaksi,jenis_pembayaran, nama, alamat, no_hp, jenis_kelamin]
+    public async addPembelianCash(pembelian: Pembelian): Promise<{ id: number }> {
+        const { tanggal_transaksi, jenis_pembayaran, nama, alamat, no_hp, jenis_kelamin } = pembelian;
+    
+        // Jalankan query INSERT dan ambil ID terakhir yang dimasukkan
+        const [result] = await this.db.query<any>( // Ganti RowDataPacket[] dengan any
+            'INSERT INTO pembelian (tanggal_transaksi, jenis_pembayaran, nama, alamat, no_hp, jenis_kelamin) VALUES (?, ?, ?, ?, ?, ?)',
+            [tanggal_transaksi, jenis_pembayaran, nama, alamat, no_hp, jenis_kelamin]
         );
+    
+        // Mengambil id yang baru dimasukkan
+        const newId = result.insertId;
+    
+        // Kembalikan ID yang baru saja dimasukkan
+        return { id: newId };
     }
-    public async addPembelianCredit(pembelian: Pembelian, filePath: string): Promise<boolean> {
+    
+    
+    public async addPembelianCredit(pembelian: Pembelian, filePath: string): Promise<number | null> {
         try {
-           
             // Upload file ke Cloudinary satu kali
             const uploadResponse = await cloudinary.uploader.upload(filePath, {
                 folder: 'products',
             });
     
-            // Dapatkan public_id dari Cloudinary
+            // Dapatkan URL foto dari Cloudinary
             const fotoKTP = uploadResponse.secure_url; // Mengambil URL lengkap yang dihasilkan oleh Cloudinary
-            const { tanggal_transaksi,jenis_pembayaran, nama, alamat, no_hp, jenis_kelamin,alamat_domisili, nik, tenor } = pembelian;
+            const { tanggal_transaksi, jenis_pembayaran, nama, alamat, no_hp, jenis_kelamin, alamat_domisili, nik, tenor } = pembelian;
     
-            // Simpan data ke database, termasuk public_id
-            await this.db.query(
-                'INSERT INTO pembelian (tanggal_transaksi,jenis_pembayaran, nama, alamat, no_hp, jenis_kelamin, alamat_domisili, nik, tenor, foto_ktp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-                [ tanggal_transaksi,jenis_pembayaran, nama, alamat, no_hp, jenis_kelamin,alamat_domisili, nik, tenor, fotoKTP]
+            // Simpan data ke database, termasuk foto_ktp
+            const [result] = await this.db.query<any>(
+                'INSERT INTO pembelian (tanggal_transaksi, jenis_pembayaran, nama, alamat, no_hp, jenis_kelamin, alamat_domisili, nik, tenor, foto_ktp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                [tanggal_transaksi, jenis_pembayaran, nama, alamat, no_hp, jenis_kelamin, alamat_domisili, nik, tenor, fotoKTP]
             );
     
-            return true; // Berhasil
+            // Mengambil id yang baru dimasukkan
+            const newId = result.insertId;
+    
+            // Kembalikan ID baru
+            return newId;
         } catch (error) {
             console.error('Error adding credit pembelian:', error);
-            return false; // Gagal
+            return null; // Gagal
         }
     }
+    
 
     public async getPembelianByJenisPembayaran(jenis_pembayaran: 'CASH' | 'CREDIT'): Promise<Pembelian[]> {
         const [rows] = await this.db.query<RowDataPacket[]>(
