@@ -14,6 +14,7 @@ class Database {
             password: process.env.DB_PASSWORD,
             database: process.env.DB_DATABASE, // Pastikan ini merujuk ke nama database yang benar
             port: Number(process.env.DB_PORT) || 3306, // Default ke 3306 jika DB_PORT tidak ada
+            connectionLimit: 10,               // Jumlah koneksi maksimal dalam pool
         });
     }
     // Static method to access the single instance

@@ -1,68 +1,79 @@
-// // src/middleware/AuthMiddleware.ts
+import { Request, Response, NextFunction } from 'express';
+import jwt, { JwtPayload } from 'jsonwebtoken';
+import dotenv from 'dotenv';
 
-// import { Request, Response, NextFunction } from 'express';
-// import jwt, { JwtPayload } from 'jsonwebtoken';
-// import dotenv from 'dotenv';
+dotenv.config();
 
-// dotenv.config();
+const JWT_SECRET = process.env.JWT_SECRET || 'defaultSecret'; // Default untuk mencegah undefined
 
-// const JWT_SECRET = process.env.JWT_SECRET || '';
+// Interface untuk request yang terautentikasi
+export interface AuthenticatedRequest extends Request {
+    id_akun?: string;
+    no_hp?: string;
+    role?: string;
+}
 
-// // Interface untuk request yang terautentikasi
-// export interface AuthenticatedRequest extends Request {
-//     id_akun?: string;
-//     no_hp?: string;
-//     role?: string;
-// }
+// Kelas AuthMiddleware
+class AuthMiddleware {
+    private jwtSecret: string;
 
-// // Kelas AuthMiddleware
-// class AuthMiddleware {
-//     private jwtSecret: string;
+    constructor(secret: string = JWT_SECRET) {
+        this.jwtSecret = secret;
+    }
 
-//     constructor(secret: string = JWT_SECRET) {
-//         this.jwtSecret = secret;
-//     }
+    public verifyToken = (req: AuthenticatedRequest, res: Response, next: NextFunction): void => {
+        try {
+            const authHeader = req.headers.authorization;
 
-//     public verifyToken(req: AuthenticatedRequest, res: Response, next: NextFunction): void {
-//         const token = req.headers.authorization?.split(' ')[1];
+            if (!authHeader || !authHeader.startsWith('Bearer ')) {
+                res.status(403).json({ message: "No token provided or malformed authorization header!" });
+                return;
+            }
 
-//         if (!token) {
-//             res.status(403).json({ message: "No token provided!" });
-//             return;
-//         }
+            const token = authHeader.split(' ')[1];
 
-//         jwt.verify(token, this.jwtSecret, (err, decoded) => {
-//             if (err) {
-//                 console.error("Error verifying token:", err);
-//                 res.status(401).json({ message: "Unauthorized!" });
-//                 return;
-//             }
+            jwt.verify(token, this.jwtSecret, (err, decoded) => {
+                if (err) {
+                    console.error("Error verifying token:", err);
+                    res.status(401).json({ message: "Unauthorized! Invalid token." });
+                    return;
+                }
 
-//             if (decoded && typeof decoded === 'object') {
-//                 req.id_akun = (decoded as JwtPayload).id_akun;
-//                 req.no_hp = (decoded as JwtPayload).no_hp;
-//                 req.role = (decoded as JwtPayload).role;
-//             }
+                if (decoded && typeof decoded === 'object') {
+                    const payload = decoded as JwtPayload;
+                    req.id_akun = payload.id_akun;
+                    req.no_hp = payload.no_hp;
+                    req.role = payload.role;
+                }
 
-//             next();
-//         });
-//     }
+                next(); // Lanjutkan ke middleware atau handler berikutnya
+            });
+        } catch (error) {
+            console.error("Unexpected error in verifyToken:", error);
+            res.status(500).json({ message: "Internal server error." });
+        }
+    };
 
-//     public checkRole(requiredRole: string) {
-//         return (req: AuthenticatedRequest, res: Response, next: NextFunction): void => {
-//             if (!req.role) {
-//                 res.status(403).json({ message: "Role not found in token!" });
-//                 return;  // Pastikan tidak ada nilai yang dikembalikan setelah ini
-//             }
+    public checkRole = (...requiredRoles: string[]) => {
+        return (req: AuthenticatedRequest, res: Response, next: NextFunction): void => {
+            try {
+                if (!req.role) {
+                    res.status(403).json({ message: "Role not found in token!" });
+                    return;
+                }
+    
+                if (!requiredRoles.includes(req.role)) {
+                    res.status(403).json({ message: "Access denied. You do not have the required role." });
+                    return;
+                }
+    
+                next(); // Lanjutkan ke middleware atau handler berikutnya
+            } catch (error) {
+                console.error("Unexpected error in checkRole:", error);
+                res.status(500).json({ message: "Internal server error." });
+            }
+        };
+    };    
+}
 
-//             if (req.role !== requiredRole) {
-//                 res.status(403).json({ message: "Anda tidak memiliki akses kesini" });
-//                 return;  // Pastikan tidak ada nilai yang dikembalikan setelah ini
-//             }
-
-//             next();  // Lanjutkan eksekusi jika role cocok
-//         };
-//     }
-// }
-
-// export default AuthMiddleware;
+export default AuthMiddleware;

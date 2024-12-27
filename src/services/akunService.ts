@@ -63,7 +63,6 @@ public async register(akun: Pick<Akun, 'no_hp' | 'password'>): Promise<boolean> 
     return bcrypt.compare(password, akun.password);
   }
 
-  
 }
 
 export default AkunService;
