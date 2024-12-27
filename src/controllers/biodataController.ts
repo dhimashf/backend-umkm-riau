@@ -6,29 +6,32 @@ class BiodataController {
     private biodataService = new BiodataService();
 
     // Endpoint untuk get semua biodata pelanggan (/api/biodata)
-    public async GetAllBiodata(req: Request, res: Response): Promise<void> {
-        try {
-            const data = await this.biodataService.GetAllBiodata();
-            res.status(200).json({
-                success: true,
-                data,
-            });
-        } catch (error) {
-            res.status(500).json({
-                success: false,
-                message: 'Failed to fetch data',
-                error: (error as Error).message,
-            });
-        }
+   public async GetAllBiodata(req: Request, res: Response): Promise<void> {
+    try {
+        const user = (req as any).user; // Ambil data user dari middleware
+        console.log('User Data from Token:', user);
+
+        const data = await this.biodataService.GetAllBiodata();
+        res.status(200).json({
+            success: true,
+            data,
+        });
+    } catch (error) {
+        console.error('Error in GetAllBiodata:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to fetch data',
+            error: (error as Error).message,
+        });
     }
+}
 
     // Endpoint untuk get biodata pelanggan berdasarkan NIK (/api/biodata/:nik)
     public async getBiodataById(req: Request, res: Response): Promise<void> {
         const { akun_id_akun } = req.params;
 
         try {
-            const biodata = await this.biodataService.GetBiodataById(akun_id_akun);
-
+            const biodata = await this.biodataService.GetBiodataById(parseInt(akun_id_akun));
             if (!biodata) {
                 res.status(404).json({
                     success: false,
@@ -128,6 +131,46 @@ class BiodataController {
             });
         }
     }
+    public async deleteBiodata(req: Request, res: Response): Promise<void> {
+        const { akun_id_akun } = req.params; // Mengambil id_akun dari parameter URL
+    
+        try {
+            // Validasi apakah id_akun ada dan merupakan angka
+            if (isNaN(Number(akun_id_akun))) {
+                res.status(400).json({
+                    success: false,
+                    message: 'ID akun tidak valid.',
+                });
+                return;
+            }
+    
+            // Panggil service untuk menghapus biodata berdasarkan id_akun
+            const deleted = await this.biodataService.deleteBiodata(Number(akun_id_akun));
+    
+            // Jika tidak ada biodata yang dihapus
+            if (!deleted) {
+                res.status(404).json({
+                    success: false,
+                    message: 'Biodata tidak ditemukan.',
+                });
+                return;
+            }
+    
+            // Jika berhasil dihapus
+            res.status(200).json({
+                success: true,
+                message: 'Biodata berhasil dihapus.',
+            });
+        } catch (error) {
+            // Menangani error umum
+            res.status(500).json({
+                success: false,
+                message: 'Gagal menghapus biodata.',
+                error: (error as Error).message,
+            });
+        }
+    
+}
 }
 
 export default BiodataController;

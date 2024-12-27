@@ -1,5 +1,5 @@
 import Database from '../config/database';
-import { RowDataPacket } from 'mysql2/promise'; // Import tipe data bawaan dari mysql2
+import { RowDataPacket, ResultSetHeader } from 'mysql2/promise'; // Import tipe data bawaan dari mysql2
 import cloudinary from '../config/cloudinary';
 
 interface Biodata {
@@ -9,7 +9,7 @@ interface Biodata {
     jenis_kelamin: string;
     alamat_domisili: string,
     foto_ktp: string,
-    akun_id_akun: string
+    akun_id_akun: number
 }
 class biodataService {
     private db = Database.getInstance().getConnection();
@@ -20,7 +20,7 @@ class biodataService {
         return rows;
     }
 
-    public async GetBiodataById(id_akun: string): Promise<RowDataPacket | null> {
+    public async GetBiodataById(id_akun: number): Promise<RowDataPacket | null> {
         const [result] = await this.db.query<RowDataPacket[]>(
             `SELECT * FROM biodata WHERE akun_id_akun = ?`, 
             [id_akun]
@@ -81,6 +81,19 @@ class biodataService {
             throw error;
         }
     }
+    public async deleteBiodata(id_akun: number): Promise<boolean> {
+        try {
+            const [result]: any = await this.db.query(
+                'DELETE FROM biodata WHERE akun_id_akun = ?',
+                [id_akun]
+            );
+    
+            return result.affectedRows > 0; // Return true if rows were deleted
+        } catch (error) {
+            console.error('Error deleting Biodata:', error);
+            throw error;
+        }
+}
 }
 
 
