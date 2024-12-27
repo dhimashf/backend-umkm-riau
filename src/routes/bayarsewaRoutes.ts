@@ -8,7 +8,7 @@ const controller = new BayarSewaController();
 const auth = new AuthMiddleware();
 
 
-bayarsewaRoutes.get('/',auth.verifyToken,auth.checkRole('KEPALA DIVISI','DIREKTUR'), controller.getAllBayarSewa.bind(controller));
+bayarsewaRoutes.get('/', controller.getAllBayarSewa.bind(controller));
 bayarsewaRoutes.get('/:id_sewa', controller.getBayarSewaBysewaId.bind(controller));
 bayarsewaRoutes.post('/add', upload.single('bukti'), controller.addbayarSewa.bind(controller));
 bayarsewaRoutes.delete('/:id', controller.deleteBayarSewa.bind(controller));
