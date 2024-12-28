@@ -83,6 +83,10 @@ class PembelianService {
         );
         return rows as Pembelian[];
     }
+    public async hapusPembelian(id: number): Promise<boolean> {
+        const [result]: any = await this.db.query('DELETE FROM pembelian WHERE id = ?', [id]);
+        return result.affectedRows > 0;
+    }
     
 }
 

@@ -169,6 +169,20 @@ class PembelianController {
         });
     }
 }
+public async hapusPembelian(req: Request, res: Response): Promise<void> {
+    const { id } = req.params;  // id_sewa masih tetap sebagai string
+    try {
+        const deleted = await this.pembelianService.hapusPembelian(parseInt(id));  // Menggunakan id_sewa sebagai string
+        if (!deleted) {
+            res.status(404).json({ success: false, message: 'Pembelian tidak ditemukan.' });
+            return;
+        }
+
+        res.status(200).json({ success: true, message: 'Pembelian berhasil dihapus.' });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Gagal menghapus Pembelian.', error: (error as Error).message });
+    }
+}
 
 }
 

@@ -11,5 +11,7 @@ pembelianRoutes.get('/:jenis_pembayaran', controller.getPembelianByJenisPembayar
 pembelianRoutes.post('/cash', controller.addPembelianCash.bind(controller));
 pembelianRoutes.post('/cash', controller.addPembelianCash.bind(controller));
 pembelianRoutes.post('/credit', upload.single('foto_ktp'), controller.addPembelianCredit.bind(controller));
+pembelianRoutes.delete('/:id', controller.hapusPembelian.bind(controller));
+
 
 export default pembelianRoutes;
