@@ -7,24 +7,31 @@ class PemantauanBisnisService {
     public async getTotalPendapatanBulanIni(): Promise<number> {
         const query = `
             SELECT 
-                COALESCE(SUM(bayar_sewa.jumlah), 0) + COALESCE(SUM(bukti_bayar.jumlah), 0) AS total_pendapatan
-            FROM 
-                bayar_sewa 
-            LEFT JOIN bukti_bayar ON MONTH(bayar_sewa.tanggal) = MONTH(bukti_bayar.tanggal) 
-                AND YEAR(bayar_sewa.tanggal) = YEAR(bukti_bayar.tanggal)
-            WHERE 
-                MONTH(bayar_sewa.tanggal) = MONTH(CURRENT_DATE()) 
-                AND YEAR(bayar_sewa.tanggal) = YEAR(CURRENT_DATE())
+                COALESCE((
+                    SELECT SUM(jumlah) 
+                    FROM bayar_sewa 
+                    WHERE tanggal BETWEEN DATE_FORMAT(CURRENT_DATE(), '%Y-%m-01') 
+                                      AND LAST_DAY(CURRENT_DATE())
+                ), 0) 
+                +
+                COALESCE((
+                    SELECT SUM(jumlah) 
+                    FROM bukti_bayar 
+                    WHERE tanggal BETWEEN DATE_FORMAT(CURRENT_DATE(), '%Y-%m-01') 
+                                      AND LAST_DAY(CURRENT_DATE())
+                ), 0) AS total_pendapatan
         `;
-
+    
         // Execute the query and get the result
         const [rows]: any = await this.db.query(query);
-
+    
         // Ensure the total is returned as a number (parse to integer)
         const totalPendapatan = parseInt(rows[0].total_pendapatan, 10) || 0;
-
+    
         return totalPendapatan;
     }
+    
+    
     public async getPenyewaanBiodataByBooth(id_booth: string): Promise<any[]> {
         const query = `
            SELECT 
@@ -49,7 +56,7 @@ class PemantauanBisnisService {
     LEFT JOIN bayar_sewa ON bayar_sewa.id_sewa = p.id_sewa  -- Menggabungkan riwayat pembayaran
     LEFT JOIN riwayat_kerusakan kerusakan ON kerusakan.id_booth = p.booth_id_booth  -- Menggabungkan riwayat kerusakan
     WHERE p.booth_id_booth = ?
-    GROUP BY p.id_sewa;  -- Pastikan mengelompokkan berdasarkan ID penyewaan
+    GROUP BY p.id_sewa;  
 
   
         `;
