@@ -5,7 +5,6 @@ interface Booth {
     id_booth: string;
     ukuran: string;
     status: 'DISEWA' | 'RUSAK' | 'TIDAK DISEWA';
-    harga_sewa: number;
     kerusakan?: Kerusakan[]; // Menambahkan relasi dengan kerusakan
 }
 
@@ -39,14 +38,14 @@ class BoothService {
 
     // Menambahkan booth baru
     public async createBooth(booth: Booth): Promise<void> {
-        const { id_booth, ukuran, status, harga_sewa } = booth;
-        await this.db.query('INSERT INTO booth (id_booth, ukuran, status, harga_sewa) VALUES (?, ?, ?, ?)', [id_booth, ukuran, status, harga_sewa]);
+        const { id_booth, ukuran, status } = booth;
+        await this.db.query('INSERT INTO booth (id_booth, ukuran, status) VALUES (?, ?, ?)', [id_booth, ukuran, status]);
     }
 
     // Memperbarui data booth
     public async updateBooth(id_booth: string, booth: Partial<Booth>): Promise<boolean> {
-        const { ukuran, status, harga_sewa } = booth;
-        const [result]: any = await this.db.query('UPDATE booth SET ukuran = ?, status = ?, harga_sewa = ? WHERE id_booth = ?', [ukuran, status, harga_sewa, id_booth]);
+        const { ukuran, status } = booth;
+        const [result]: any = await this.db.query('UPDATE booth SET ukuran = ?, status = ? = ? WHERE id_booth = ?', [ukuran, status, id_booth]);
         return result.affectedRows > 0;
     }
     public async updateStatus(id_booth: string, booth: Partial<Booth>): Promise<boolean> {

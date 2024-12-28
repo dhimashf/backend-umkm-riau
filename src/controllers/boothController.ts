@@ -62,10 +62,10 @@ class BoothController {
     }
 
     public async addBooth(req: Request, res: Response): Promise<void> {
-        const { id_booth, ukuran, status, harga_sewa } = req.body;
+        const { id_booth, ukuran, status } = req.body;
 
         try {
-            await this.boothService.createBooth({ id_booth, ukuran, status, harga_sewa });
+            await this.boothService.createBooth({ id_booth, ukuran, status });
             res.status(201).json({
                 success: true,
                 message: 'Booth berhasil ditambahkan.',
@@ -81,10 +81,10 @@ class BoothController {
 
     public async updateBooth(req: Request, res: Response): Promise<void> {
         const { id_booth } = req.params;
-        const { ukuran, status, harga_sewa } = req.body;
+        const { ukuran, status } = req.body;
 
         try {
-            const updated = await this.boothService.updateBooth(id_booth, { ukuran, status, harga_sewa });
+            const updated = await this.boothService.updateBooth(id_booth, { ukuran, status });
             if (!updated) {
                 res.status(404).json({
                     success: false,
