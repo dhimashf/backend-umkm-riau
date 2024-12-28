@@ -46,12 +46,12 @@ class ProdukPembelianController {
             await this.produkPembelianService.addBarangCash(pembelian);
             res.status(201).json({
                 success: true,
-                message: 'Barang Cash added successfully.',
+                message: 'Barang Cash berhasil ditambahkan.',
             });
         } catch (error) {
             res.status(500).json({
                 success: false,
-                message: 'Failed to add Barang cash.',
+                message: 'Gagal menambahkan Barang cash.',
                 error: (error as Error).message,
             });
         }

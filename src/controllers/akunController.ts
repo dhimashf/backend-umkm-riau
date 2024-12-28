@@ -17,7 +17,7 @@ class AkunController {
         } catch (error) {
             res.status(500).json({
                 success: false,
-                message: 'Failed to fetch data',
+                message: 'Gagal untuk mengambil data',
                 error: (error as Error).message,
             });
         }
@@ -44,7 +44,7 @@ class AkunController {
         } catch (error) {
             res.status(500).json({
                 success: false,
-                message: 'Gagal mengambil Akun.',
+                message: 'Gagal mengambil data Akun.',
                 error: (error as Error).message,
             });
         }
@@ -71,7 +71,7 @@ class AkunController {
         } catch (error) {
             res.status(500).json({
                 success: false,
-                message: 'Gagal mengambil Akun.',
+                message: 'Gagal mengambil data Akun.',
                 error: (error as Error).message,
             });
         }

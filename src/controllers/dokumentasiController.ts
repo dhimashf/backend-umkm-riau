@@ -42,7 +42,7 @@ class DokumentasiController {
                 data: dokumentasi,
             });
         } catch (error) {
-            console.error(`Error fetching dokumentasi with ID ${id}:`, error);
+            console.error(`gagal mengambil dokumentasi dengan ID ${id}:`, error);
             res.status(500).json({
                 success: false,
                 message: 'Gagal mengambil dokumentasi.',
@@ -91,7 +91,7 @@ class DokumentasiController {
                 });
             }
         } catch (error) {
-            console.error('Error adding dokumentasi:', error);
+            console.error('Gagal menabahkan dokumentasi:', error);
             res.status(500).json({
                 success: false,
                 message: 'Internal server error saat menambahkan dokumentasi.',
@@ -126,7 +126,7 @@ class DokumentasiController {
                 message: 'Dokumentasi berhasil diperbarui.',
             });
         } catch (error) {
-            console.error(`Error updating dokumentasi with ID ${id}:`, error);
+            console.error(`Gagal memperbarui dokumentasi dengan ID ${id}:`, error);
             res.status(500).json({
                 success: false,
                 message: 'Gagal memperbarui dokumentasi.',
@@ -155,7 +155,7 @@ class DokumentasiController {
                 message: 'Dokumentasi berhasil dihapus.',
             });
         } catch (error) {
-            console.error(`Error deleting dokumentasi with ID ${id}:`, error);
+            console.error(`Gagal menghapus dokumentasi dengan ID ${id}:`, error);
             res.status(500).json({
                 success: false,
                 message: 'Gagal menghapus dokumentasi.',

@@ -14,7 +14,7 @@ class bayarSewaController {
       } catch (error) {
           res.status(500).json({
               success: false,
-              message: 'Failed to fetch bukti bayar.',
+              message: 'Gagal mengambil data bukti bayar.',
               error: (error as Error).message,
           });
       }
@@ -30,7 +30,7 @@ class bayarSewaController {
             if (!id_sewa || !tanggal || !jumlah) {
                 res.status(400).json({
                     success: false,
-                    message: 'All fields (id_sewa, tanggal, jumlah) must be provided.',
+                    message: 'Isi semua kolom (id_sewa, tanggal, jumlah).',
                 });
                 return;
             }
@@ -38,7 +38,7 @@ class bayarSewaController {
             if (!filePath) {
                 res.status(400).json({
                     success: false,
-                    message: 'File must be uploaded.',
+                    message: 'File harus di upload',
                 });
                 return;
             }
@@ -52,19 +52,19 @@ class bayarSewaController {
             if (isSuccess) {
                 res.status(201).json({
                     success: true,
-                    message: 'Bukti bayar added successfully.',
+                    message: 'Bukti bayar berhasil ditambahkan',
                 });
             } else {
                 res.status(500).json({
                     success: false,
-                    message: 'Failed to add bukti bayar.',
+                    message: 'Gagal menambahkan bukti bayar.',
                 });
             }
         } catch (error) {
-            console.error('Error adding bukti bayar:', error);
+            console.error('Error menambahkan bukti bayar:', error);
             res.status(500).json({
                 success: false,
-                message: 'Internal server error while adding bukti bayar.',
+                message: 'Internal server error saat menambahkan bukti bayar.',
                 error: (error as Error).message,
             });
         }
@@ -79,7 +79,7 @@ class bayarSewaController {
             if (bayarSewa.length === 0) {
                 res.status(404).json({
                     success: false,
-                    message: 'No bukti bayar found for the given id_sewa.',
+                    message: 'Tidak ada bukti bayar untuk id_sewa tersebut.',
                 });
                 return;
             }
@@ -91,7 +91,7 @@ class bayarSewaController {
         } catch (error) {
             res.status(500).json({
                 success: false,
-                message: 'Failed to fetch bukti bayar.',
+                message: 'Gagal mengambil data bukti bayar.',
                 error: (error as Error).message,
             });
         }
@@ -116,7 +116,7 @@ class bayarSewaController {
                 message: 'Bukti Bayar berhasil dihapus.',
             });
         } catch (error) {
-            console.error(`Error deleting Bukti Bayar with ID ${id}:`, error);
+            console.error(`Error menghapus Bukti Bayar dengan ID ${id}:`, error);
             res.status(500).json({
                 success: false,
                 message: 'Gagal menghapus Bukti Bayar.',

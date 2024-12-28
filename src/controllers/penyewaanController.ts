@@ -27,9 +27,14 @@ class PenyewaanController {
     public async getAllPenyewaan(req: Request, res: Response): Promise<void> {
         try {
             const data = await this.penyewaanService.getAllPenyewaan();
-            res.status(200).json({ success: true, data });
+            res.status(200).json({ 
+                success: true, 
+                data });
         } catch (error) {
-            res.status(500).json({ success: false, message: 'Gagal mengambil data penyewaan.', error: (error as Error).message });
+            res.status(500).json({ 
+                success: false, 
+                message: 'Gagal mengambil data penyewaan.', 
+                error: (error as Error).message });
         }
     }
 
@@ -37,9 +42,14 @@ class PenyewaanController {
     public async getLokasiBooth(req: Request, res: Response): Promise<void> {
         try {
             const data = await this.penyewaanService.getLokasiBooth();
-            res.status(200).json({ success: true, data });
+            res.status(200).json({ 
+                success: true, 
+                data });
         } catch (error) {
-            res.status(500).json({ success: false, message: 'Gagal mengambil data Lokasi.', error: (error as Error).message });
+            res.status(500).json({ 
+                success: false, 
+                message: 'Gagal mengambil data Lokasi.', 
+                error: (error as Error).message });
         }
     }
 

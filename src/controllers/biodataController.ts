@@ -20,7 +20,7 @@ class BiodataController {
         console.error('Error in GetAllBiodata:', error);
         res.status(500).json({
             success: false,
-            message: 'Failed to fetch data',
+            message: 'Gagal mengambil data',
             error: (error as Error).message,
         });
     }
@@ -96,7 +96,7 @@ class BiodataController {
     
             res.status(201).json({ success: true, message: 'Biodata berhasil ditambahkan.' });
         } catch (error) {
-            console.error('Error in addBiodata:', error);
+            console.error('Error pada addBiodata:', error);
     
             res.status(500).json({
                 success: false,

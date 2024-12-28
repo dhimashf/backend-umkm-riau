@@ -14,7 +14,7 @@ class PembelianController {
         } catch (error) {
             res.status(500).json({
                 success: false,
-                message: 'Failed to fetch pembelian data.',
+                message: 'Gagal mendapatkan pembelian data.',
                 error: (error as Error).message,
             });
         }
@@ -28,13 +28,13 @@ class PembelianController {
     
             res.status(201).json({
                 success: true,
-                message: 'Pembelian Cash added successfully.',
+                message: 'Pembelian Cash berhasil ditambahkan.',
                 id: result.id,  // Menggunakan result.id untuk mengembalikan ID yang baru saja ditambahkan
             });
         } catch (error) {
             res.status(500).json({
                 success: false,
-                message: 'Failed to add Pembelian cash.',
+                message: 'Gagal menambahkan Pembelian cash.',
                 error: (error as Error).message,
             });
         }

@@ -14,7 +14,7 @@ class KreditController {
         } catch (error) {
             res.status(500).json({
                 success: false,
-                message: 'Failed to fetch data',
+                message: 'Gagal mengambil data',
                 error: (error as Error).message,
             });
         }
@@ -28,7 +28,7 @@ class KreditController {
             if (!kredit) {
                 res.status(404).json({
                     success: false,
-                    message: 'Riwayat Pembayaran not found.',
+                    message: 'Riwayat Pembayaran tidak ditemukan.',
                 });
                 return;
             }
@@ -40,7 +40,7 @@ class KreditController {
         } catch (error) {
             res.status(500).json({
                 success: false,
-                message: 'Failed to fetch Riwayat Pembayaran.',
+                message: 'Gagal mengambil Riwayat Pembayaran.',
                 error: (error as Error).message,
             });
         }
@@ -53,12 +53,12 @@ class KreditController {
             await this.kreditService.addRiwayatPembayaran({ tanggal, bukti, jumlah, pembelian_id });
             res.status(201).json({
                 success: true,
-                message: 'Riwayat Pembayaran added successfully.',
+                message: 'Riwayat Pembayaran berhasil ditambahkan.',
             });
         } catch (error) {
             res.status(500).json({
                 success: false,
-                message: 'Failed to add Riwayat Pembayaran.',
+                message: 'Gagal menambahkan Riwayat Pembayaran.',
                 error: (error as Error).message,
             });
         }
@@ -73,7 +73,7 @@ class KreditController {
             if (!updated) {
                 res.status(404).json({
                     success: false,
-                    message: 'Riwayat Pembayaran not found.',
+                    message: 'Riwayat Pembayaran tidak ditemukan.',
                 });
                 return;
             }
@@ -85,7 +85,7 @@ class KreditController {
         } catch (error) {
             res.status(500).json({
                 success: false,
-                message: 'Failed to update Riwayat Pembayaran.',
+                message: 'gagal update Riwayat Pembayaran.',
                 error: (error as Error).message,
             });
         }
@@ -99,14 +99,14 @@ class KreditController {
             if (!deleted) {
                 res.status(404).json({
                     success: false,
-                    message: 'Riwayat Pembayaran not found.',
+                    message: 'Riwayat Pembayaran tidak ditemukan.',
                 });
                 return;
             }
 
             res.status(200).json({
                 success: true,
-                message: 'Riwayat pembayaran deleted successfully.',
+                message: 'Riwayat pembayaran berhasil dihapus.',
             });
         } catch (error) {
             res.status(500).json({

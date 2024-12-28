@@ -14,7 +14,7 @@ class BoothController {
         } catch (error) {
             res.status(500).json({
                 success: false,
-                message: 'Failed to fetch data',
+                message: 'Gagal mengambil data',
                 error: (error as Error).message,
             });
         }
@@ -29,7 +29,7 @@ class BoothController {
         } catch (error) {
             res.status(500).json({
                 success: false,
-                message: 'Failed to fetch data',
+                message: 'Gagal mengambil data',
                 error: (error as Error).message,
             });
         }
@@ -43,7 +43,7 @@ class BoothController {
             if (!booth) {
                 res.status(404).json({
                     success: false,
-                    message: 'Booth not found.',
+                    message: 'Booth tidak ditemukan',
                 });
                 return;
             }
@@ -55,7 +55,7 @@ class BoothController {
         } catch (error) {
             res.status(500).json({
                 success: false,
-                message: 'Failed to fetch booth.',
+                message: 'Gagal mengambil booth.',
                 error: (error as Error).message,
             });
         }
@@ -68,12 +68,12 @@ class BoothController {
             await this.boothService.createBooth({ id_booth, ukuran, status, harga_sewa });
             res.status(201).json({
                 success: true,
-                message: 'Booth added successfully.',
+                message: 'Booth berhasil ditambahkan.',
             });
         } catch (error) {
             res.status(500).json({
                 success: false,
-                message: 'Failed to add booth.',
+                message: 'Gagal menambahkan booth.',
                 error: (error as Error).message,
             });
         }
@@ -88,19 +88,19 @@ class BoothController {
             if (!updated) {
                 res.status(404).json({
                     success: false,
-                    message: 'Booth not found.',
+                    message: 'Booth tidak ditemukan',
                 });
                 return;
             }
 
             res.status(200).json({
                 success: true,
-                message: 'Booth updated successfully.',
+                message: 'Booth berhasil di Update',
             });
         } catch (error) {
             res.status(500).json({
                 success: false,
-                message: 'Failed to update booth.',
+                message: 'Gagal untuk update booth.',
                 error: (error as Error).message,
             });
         }
@@ -114,19 +114,19 @@ class BoothController {
             if (!updated) {
                 res.status(404).json({
                     success: false,
-                    message: 'Booth not found.',
+                    message: 'Booth tidak ditemukan',
                 });
                 return;
             }
 
             res.status(200).json({
                 success: true,
-                message: 'Booth Status updated successfully.',
+                message: 'Booth Status berhasil di Update',
             });
         } catch (error) {
             res.status(500).json({
                 success: false,
-                message: 'Failed to update Status booth.',
+                message: 'Gagal untuk update Status booth.',
                 error: (error as Error).message,
             });
         }
@@ -140,19 +140,19 @@ class BoothController {
             if (!deleted) {
                 res.status(404).json({
                     success: false,
-                    message: 'Booth not found.',
+                    message: 'Booth tidak ditemukan',
                 });
                 return;
             }
 
             res.status(200).json({
                 success: true,
-                message: 'Booth deleted successfully.',
+                message: 'Booth berhasil dihapus',
             });
         } catch (error) {
             res.status(500).json({
                 success: false,
-                message: 'Failed to delete booth.',
+                message: 'Gagal untuk menghapus booth.',
                 error: (error as Error).message,
             });
         }
@@ -167,12 +167,12 @@ class BoothController {
             await this.boothService.addKerusakan(id_booth, tanggal_kerusakan, riwayat_kerusakan);
             res.status(201).json({
                 success: true,
-                message: 'Kerusakan added successfully.',
+                message: 'Kerusakan berhasil ditambahkan.',
             });
         } catch (error) {
             res.status(500).json({
                 success: false,
-                message: 'Failed to add kerusakan.',
+                message: 'Gagal menambahkan kerusakan.',
                 error: (error as Error).message,
             });
         }
@@ -189,7 +189,7 @@ class BoothController {
         } catch (error) {
             res.status(500).json({
                 success: false,
-                message: 'Failed to fetch kerusakan.',
+                message: 'Gagal mengambil kerusakan.',
                 error: (error as Error).message,
             });
         }
@@ -203,7 +203,7 @@ class BoothController {
             if (!kerusakan) {
                 res.status(404).json({
                     success: false,
-                    message: 'Kerusakan not found.',
+                    message: 'Kerusakan tidak ditemukan',
                 });
                 return;
             }
@@ -215,7 +215,7 @@ class BoothController {
         } catch (error) {
             res.status(500).json({
                 success: false,
-                message: 'Failed to fetch kerusakan.',
+                message: 'Gagal mengambil kerusakan.',
                 error: (error as Error).message,
             });
         }

@@ -15,7 +15,7 @@ class BuktiBayarController {
         } catch (error) {
             res.status(500).json({
                 success: false,
-                message: 'Failed to fetch bukti bayar.',
+                message: 'Gagal untuk mengambil bukti bayar.',
                 error: (error as Error).message,
             });
         }
@@ -31,7 +31,7 @@ class BuktiBayarController {
             if (!id_pembelian || !tanggal || !jumlah) {
                 res.status(400).json({
                     success: false,
-                    message: 'All fields (id_pembelian, tanggal, jumlah) must be provided.',
+                    message: 'semua kolom harus diisi.',
                 });
                 return;
             }
@@ -39,7 +39,7 @@ class BuktiBayarController {
             if (!filePath) {
                 res.status(400).json({
                     success: false,
-                    message: 'File must be uploaded.',
+                    message: 'File harus di upload',
                 });
                 return;
             }
@@ -53,12 +53,12 @@ class BuktiBayarController {
             if (isSuccess) {
                 res.status(201).json({
                     success: true,
-                    message: 'Bukti bayar added successfully.',
+                    message: 'Bukti bayar berhasil Ditambahkan',
                 });
             } else {
                 res.status(500).json({
                     success: false,
-                    message: 'Failed to add bukti bayar.',
+                    message: 'Gagal untuk menambahkan bukti bayar.',
                 });
             }
         } catch (error) {
@@ -80,7 +80,7 @@ class BuktiBayarController {
             if (buktiBayar.length === 0) {
                 res.status(404).json({
                     success: false,
-                    message: 'No bukti bayar found for the given id_pembelian.',
+                    message: 'Tidak ada bukti bayar untuk id_pembelian tersebut.',
                 });
                 return;
             }
@@ -92,7 +92,7 @@ class BuktiBayarController {
         } catch (error) {
             res.status(500).json({
                 success: false,
-                message: 'Failed to fetch bukti bayar.',
+                message: 'Gagal untuk mengambil bukti bayar.',
                 error: (error as Error).message,
             });
         }

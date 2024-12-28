@@ -18,7 +18,7 @@ class PemantauanBisnisController {
         } catch (error) {
             res.status(500).json({
                 success: false,
-                message: 'Failed to fetch total pendapatan.',
+                message: 'Gagal mendapatkan total pendapatan.',
                 error: (error as Error).message,
             });
         }
@@ -35,7 +35,7 @@ class PemantauanBisnisController {
         } catch (error) {
             res.status(500).json({
                 success: false,
-                message: 'Failed to fetch penyewaan data by booth.',
+                message: 'Gagal mendapatkan penyewaan data berdasarkan booth.',
                 error: (error as Error).message,
             });
         }
