@@ -31,7 +31,7 @@ class App {
         // Konfigurasi CORS
         this.app.use(
             cors({
-                origin: ['http://localhost:3000','http://192.168.1.132:3000'],
+                origin: ['http://localhost:3000','http://192.168.1.133:3000'],
                 methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
                 allowedHeaders: ['Content-Type', 'Authorization'],
             })
