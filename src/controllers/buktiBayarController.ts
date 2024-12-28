@@ -125,6 +125,34 @@ class BuktiBayarController {
             });
         }
     }
+    public async deleteBuktiBayarByIdPembelian(req: Request, res: Response): Promise<void> {
+        const { id_pembelian } = req.params;
+
+        try {
+            // Hapus dokumentasi menggunakan service
+            const deleted = await this.buktiBayarService.deleteBuktiBayarByIdPembelian( parseInt(id_pembelian));
+
+            if (!deleted) {
+                res.status(404).json({
+                    success: false,
+                    message: 'Bukti Bayar tidak ditemukan.',
+                });
+                return;
+            }
+
+            res.status(200).json({
+                success: true,
+                message: 'Bukti Bayar berhasil dihapus.',
+            });
+        } catch (error) {
+            console.error(`Error deleting Bukti Bayar with ID ${id_pembelian}:`, error);
+            res.status(500).json({
+                success: false,
+                message: 'Gagal menghapus Bukti Bayar.',
+                error: (error as Error).message,
+            });
+        }
+    }
 }
 
 export default BuktiBayarController;

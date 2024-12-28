@@ -69,6 +69,23 @@ class ProdukPembelianService {
             totalTransaksi, // Total transaksi
         };
     }
+    public async hapusProdukPembelian(id_pembelian: number): Promise<boolean> {
+        if (!id_pembelian || isNaN(id_pembelian)) {
+            throw new Error('ID pembelian tidak valid.');
+        }
+
+        try {
+            const [result]: any = await this.db.query(
+                'DELETE FROM produk_pembelian WHERE id_pembelian = ?',
+                [id_pembelian]
+            );
+
+            return result.affectedRows > 0;
+        } catch (error) {
+            console.error('Error deleting produk pembelian:', error);
+            throw new Error('Gagal menghapus produk pembelian.');
+        }
+    }
     
 }
 

@@ -71,6 +71,26 @@ class BuktiBayarService {
                 return false; // Gagal
             }
         }
+        public async deleteBuktiBayarByIdPembelian(id_pembelian: number): Promise<boolean> {
+            try {
+                // Dapatkan data dokumentasi untuk mengambil public_id
+                const [currentData]: any = await this.db.query('SELECT bukti FROM bukti_bayar WHERE id_pembelian = ?', [id_pembelian]);
+                if (currentData.length > 0) {
+                    const buktiPublicId = currentData[0].foto;
+                    if (buktiPublicId) {
+                        // Hapus file dari Cloudinary
+                        await cloudinary.uploader.destroy(buktiPublicId);
+                    }
+                }
+    
+                // Hapus dari database
+                const [result]: any = await this.db.query('DELETE FROM bukti_bayar WHERE id_pembelian = ?', [id_pembelian]);
+                return result.affectedRows > 0; // Berhasil dihapus jika ada baris yang terpengaruh
+            } catch (error) {
+                console.error('Error deleting dokumentasi:', error);
+                return false; // Gagal
+            }
+        }
 }
 
 export default BuktiBayarService;

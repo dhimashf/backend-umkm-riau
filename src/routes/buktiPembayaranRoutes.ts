@@ -9,5 +9,6 @@ buktiPembayaranRoutes.get('/', controller.getAllBuktiBayar.bind(controller));
 buktiPembayaranRoutes.get('/:id_pembelian', controller.getBuktiByPembelianId.bind(controller));
 buktiPembayaranRoutes.post('/', upload.single('bukti'), controller.addBuktiBayar.bind(controller));
 buktiPembayaranRoutes.delete('/:id', controller.deleteBuktiBayar.bind(controller));
+buktiPembayaranRoutes.delete('/idpembelian/:id_pembelian', controller.deleteBuktiBayarByIdPembelian.bind(controller));
 
 export default buktiPembayaranRoutes;
