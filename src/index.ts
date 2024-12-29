@@ -8,7 +8,6 @@ import boothRoutes from './routes/boothRoutes';
 import biodataRoutes from './routes/biodataRoutes';
 import pembelianRoutes from './routes/pembelianRoutes';
 import penyewaanRoutes from './routes/penyewaanRoutes';
-import kreditRoutes from './routes/kreditRoutes';
 import produkPembelianRoutes from './routes/produkPembelianRoutes';
 import buktiPembayaranRoutes from './routes/buktiPembayaranRoutes';
 import PemantauanBisnisRoutes from './routes/pemantauanBisnisRoutes';
@@ -55,7 +54,6 @@ class App {
         this.app.use('/api/booth', boothRoutes);
         this.app.use('/api/pembelian', pembelianRoutes);
         this.app.use('/api/penyewaan', penyewaanRoutes);
-        this.app.use('/api/kredit', kreditRoutes);
         this.app.use('/api/produk', produkPembelianRoutes);
         this.app.use('/api/bukti', buktiPembayaranRoutes);
         this.app.use('/api/pemantauan-bisnis', PemantauanBisnisRoutes);
