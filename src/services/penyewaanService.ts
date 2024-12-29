@@ -97,12 +97,22 @@ class PenyewaanService {
             return false; // Jika terjadi error, return false
         }
     }
-    
-
     // Menghapus penyewaan berdasarkan id_sewa
     public async hapusPenyewaan(id_sewa: number): Promise<boolean> {
         const [result]: any = await this.db.query('DELETE FROM penyewaan WHERE id_sewa = ?', [id_sewa]);
         return result.affectedRows > 0;
+    }
+    public async getPenyewaanByBoothId(booth_id_booth: string): Promise<RowDataPacket[]> {
+        try {
+            const [rows] = await this.db.query<RowDataPacket[]>(
+                'SELECT * FROM penyewaan WHERE booth_id_booth = ?',
+                [booth_id_booth]
+            );
+            return rows;
+        } catch (error) {
+            console.error('Error fetching penyewaan by booth ID:', error);
+            throw error;
+        }
     }
 }
 

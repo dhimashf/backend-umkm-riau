@@ -12,5 +12,6 @@ bayarsewaRoutes.get('/', controller.getAllBayarSewa.bind(controller));
 bayarsewaRoutes.get('/:id_sewa', controller.getBayarSewaBysewaId.bind(controller));
 bayarsewaRoutes.post('/add', upload.single('bukti'), controller.addbayarSewa.bind(controller));
 bayarsewaRoutes.delete('/:id', controller.deleteBayarSewa.bind(controller));
+bayarsewaRoutes.delete('/hapus/:id_sewa', controller.deleteSewaByidSewa.bind(controller));
 
 export default bayarsewaRoutes;

@@ -124,6 +124,34 @@ class bayarSewaController {
             });
         }
     }
+    public async deleteSewaByidSewa(req: Request, res: Response): Promise<void> {
+        const { id_sewa } = req.params;
+
+        try {
+            // Hapus dokumentasi menggunakan service
+            const deleted = await this.BayarSewaService.deleteBayarSewaByIdSewa(Number(id_sewa));
+
+            if (!deleted) {
+                res.status(404).json({
+                    success: false,
+                    message: 'Bukti Bayar tidak ditemukan.',
+                });
+                return;
+            }
+
+            res.status(200).json({
+                success: true,
+                message: 'Bukti Bayar berhasil dihapus.',
+            });
+        } catch (error) {
+            console.error(`Error menghapus Bukti Bayar dengan ID ${id_sewa}:`, error);
+            res.status(500).json({
+                success: false,
+                message: 'Gagal menghapus Bukti Bayar.',
+                error: (error as Error).message,
+            });
+        }
+    }
 }
 
 export default bayarSewaController;

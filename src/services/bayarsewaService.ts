@@ -72,6 +72,27 @@ class BayarSewaService {
                 return false; // Gagal
             }
         }
+
+        public async deleteBayarSewaByIdSewa(id_sewa: number): Promise<boolean> {
+            try {
+                // Dapatkan data dokumentasi untuk mengambil public_id
+                const [currentData]: any = await this.db.query('SELECT bukti FROM bayar_sewa WHERE id_sewa = ?', [id_sewa]);
+                if (currentData.length > 0) {
+                    const buktiPublicId = currentData[0].foto;
+                    if (buktiPublicId) {
+                        // Hapus file dari Cloudinary
+                        await cloudinary.uploader.destroy(buktiPublicId);
+                    }
+                }
+    
+                // Hapus dari database
+                const [result]: any = await this.db.query('DELETE FROM bayar_sewa WHERE id_sewa = ?', [id_sewa]);
+                return result.affectedRows > 0; // Berhasil dihapus jika ada baris yang terpengaruh
+            } catch (error) {
+                console.error('Error deleting dokumentasi:', error);
+                return false; // Gagal
+            }
+        }
 }
 
 export default BayarSewaService;

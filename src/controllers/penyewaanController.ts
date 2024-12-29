@@ -152,6 +152,32 @@ public async updateStatusPenyewaan(req: Request, res: Response): Promise<void> {
         });
     }
 }
+public async getPenyewaanByBoothId(req: Request, res: Response): Promise<void> {
+    const { booth_id_booth } = req.params; // Mengambil booth_id_booth dari parameter request
+
+    try {
+        const penyewaan = await this.penyewaanService.getPenyewaanByBoothId(booth_id_booth);
+
+        if (!penyewaan || penyewaan.length === 0) {
+            res.status(404).json({
+                success: false,
+                message: 'Tidak ada penyewaan untuk Booth ID yang diberikan.',
+            });
+            return;
+        }
+
+        res.status(200).json({
+            success: true,
+            data: penyewaan,
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Gagal mengambil data penyewaan berdasarkan Booth ID.',
+            error: (error as Error).message,
+        });
+    }
+}
 
 }
 
