@@ -97,6 +97,22 @@ class PenyewaanService {
             return false; // Jika terjadi error, return false
         }
     }
+    public async updateBoothPenyewaan(id_sewa: number, booth_id_booth: string): Promise<boolean> {
+        try {
+            const [result]: any = await this.db.query(
+                `UPDATE penyewaan 
+                 SET booth_id_booth = ? 
+                 WHERE id_sewa = ?`,
+                [booth_id_booth, id_sewa] // Menyertakan id_sewa yang sudah dalam format number
+            );
+    
+            // Cek apakah ada baris yang terpengaruh oleh query
+            return result.affectedRows > 0; // Jika ada baris yang terpengaruh, return true
+        } catch (error) {
+            console.error('Error updating status penyewaan:', error);
+            return false; // Jika terjadi error, return false
+        }
+    }
     // Menghapus penyewaan berdasarkan id_sewa
     public async hapusPenyewaan(id_sewa: number): Promise<boolean> {
         const [result]: any = await this.db.query('DELETE FROM penyewaan WHERE id_sewa = ?', [id_sewa]);

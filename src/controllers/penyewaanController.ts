@@ -152,6 +152,44 @@ public async updateStatusPenyewaan(req: Request, res: Response): Promise<void> {
         });
     }
 }
+public async updateBoothPenyewaan(req: Request, res: Response): Promise<void> {
+    const { id_sewa } = req.params;  // id_sewa tetap sebagai string
+    const { booth_id_booth } = req.body;
+
+    // Parsing id_sewa menjadi number
+    const idSewaNumber = parseInt(id_sewa);
+
+    if (isNaN(idSewaNumber)) {
+        res.status(400).json({
+            success: false,
+            message: 'id_sewa harus berupa angka.',
+        });
+        return;
+    }
+
+    try {
+        const updated = await this.penyewaanService.updateBoothPenyewaan(idSewaNumber, booth_id_booth);
+
+        if (!updated) {
+            res.status(404).json({
+                success: false,
+                message: 'Penyewaan tidak ditemukan atau gagal diperbarui.',
+            });
+            return;
+        }
+
+        res.status(200).json({
+            success: true,
+            message: 'Booth penyewaan berhasil diperbarui.',
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Gagal memperbarui Booth penyewaan.',
+            error: (error as Error).message,
+        });
+    }
+}
 public async getPenyewaanByBoothId(req: Request, res: Response): Promise<void> {
     const { booth_id_booth } = req.params; // Mengambil booth_id_booth dari parameter request
 
