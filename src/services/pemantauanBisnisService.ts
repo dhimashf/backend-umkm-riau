@@ -20,6 +20,13 @@ class PemantauanBisnisService {
                     WHERE tanggal BETWEEN DATE_FORMAT(CURRENT_DATE(), '%Y-%m-01') 
                                       AND LAST_DAY(CURRENT_DATE())
                 ), 0) AS total_pendapatan
+                +
+                COALESCE((
+                    SELECT SUM(jumlah) 
+                    FROM riwayat_sewa 
+                    WHERE tanggal BETWEEN DATE_FORMAT(CURRENT_DATE(), '%Y-%m-01') 
+                                      AND LAST_DAY(CURRENT_DATE())
+                ), 0) AS total_pendapatan
         `;
     
         // Execute the query and get the result
