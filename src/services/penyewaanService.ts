@@ -81,22 +81,33 @@ class PenyewaanService {
     }
 
     // Mengupdate status penyewaan
-    public async updateStatusPenyewaan(id_sewa: number, status: 'MENUNGGU' | 'DIPROSES' | 'DITOLAK' | 'DISETUJUI' | 'SELESAI'): Promise<boolean> {
+    public async updateStatusPenyewaan(
+        id_sewa: number,
+        status: 'MENUNGGU' | 'DIPROSES' | 'DITOLAK' | 'DISETUJUI' | 'SELESAI'
+    ): Promise<boolean> {
         try {
+            // Validasi untuk memastikan hanya status "SELESAI" yang dapat diterapkan
+            if (status !== 'SELESAI') {
+                console.error('Status yang diberikan bukan "SELESAI".');
+                return false;
+            }
+    
+            // Jalankan query untuk memperbarui status
             const [result]: any = await this.db.query(
                 `UPDATE penyewaan 
                  SET status = ? 
                  WHERE id_sewa = ?`,
-                [status, id_sewa] // Menyertakan id_sewa yang sudah dalam format number
+                [status, id_sewa] // Menyertakan id_sewa dan status
             );
     
-            // Cek apakah ada baris yang terpengaruh oleh query
-            return result.affectedRows > 0; // Jika ada baris yang terpengaruh, return true
+            // Cek apakah ada baris yang terpengaruh
+            return result.affectedRows > 0;
         } catch (error) {
             console.error('Error updating status penyewaan:', error);
             return false; // Jika terjadi error, return false
         }
     }
+    
     public async updateBoothPenyewaan(id_sewa: number, booth_id_booth: string): Promise<boolean> {
         try {
             const [result]: any = await this.db.query(
