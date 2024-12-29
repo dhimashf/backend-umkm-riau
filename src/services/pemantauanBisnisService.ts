@@ -19,7 +19,7 @@ class PemantauanBisnisService {
                     FROM bukti_bayar 
                     WHERE tanggal BETWEEN DATE_FORMAT(CURRENT_DATE(), '%Y-%m-01') 
                                       AND LAST_DAY(CURRENT_DATE())
-                ), 0) AS total_pendapatan
+                ), 0) 
                 +
                 COALESCE((
                     SELECT SUM(jumlah) 
