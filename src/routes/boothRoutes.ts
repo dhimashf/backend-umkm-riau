@@ -23,16 +23,5 @@ boothRoutes.put('/status/:id_booth', controller.updateStatus.bind(controller));
 // Route untuk menghapus booth berdasarkan ID
 boothRoutes.delete('/:id_booth', controller.deleteBooth.bind(controller));
 
-// Route untuk menambahkan kerusakan ke booth
-boothRoutes.post('/kerusakan', controller.addKerusakan.bind(controller));
-
-// Route untuk mendapatkan semua kerusakan
-boothRoutes.get('/riwayat/kerusakan', controller.getAllKerusakan.bind(controller));
-
-// Route untuk mendapatkan kerusakan berdasarkan ID booth
-boothRoutes.get('/riwayat/kerusakan/:id_booth', controller.getKerusakanById.bind(controller));
-
-// boothRoutes.ts
-boothRoutes.delete('/riwayat/kerusakan/:id', controller.deleteKerusakan.bind(controller));
 
 export default boothRoutes;

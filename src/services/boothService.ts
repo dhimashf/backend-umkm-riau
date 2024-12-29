@@ -5,7 +5,6 @@ interface Booth {
     id_booth: string;
     ukuran: string;
     status: 'DISEWA' | 'RUSAK' | 'TIDAK DISEWA';
-    kerusakan?: Kerusakan[]; // Menambahkan relasi dengan kerusakan
 }
 
 interface Kerusakan {
@@ -59,32 +58,6 @@ public async updateStatus(id_booth: string, status: string): Promise<boolean> {
         const [result]: any = await this.db.query('DELETE FROM booth WHERE id_booth = ?', [id_booth]);
         return result.affectedRows > 0;
     }
-
-    // Menambahkan riwayat kerusakan
-    public async addKerusakan(id_booth: string, tanggal_kerusakan: string, riwayat_kerusakan: string): Promise<void> {
-        await this.db.query(
-            'INSERT INTO riwayat_kerusakan (id_booth, tanggal_kerusakan, riwayat_kerusakan) VALUES (?, ?, ?)',
-            [id_booth, tanggal_kerusakan, riwayat_kerusakan]
-        );
-    }
-
-    // Mengambil semua riwayat kerusakan
-    public async getAllKerusakan(): Promise<RowDataPacket[]> {
-        const [rows] = await this.db.query<RowDataPacket[]>('SELECT * FROM riwayat_kerusakan');
-        return rows;
-    }
-
-    // Mengambil riwayat kerusakan berdasarkan ID booth
-    public async getKerusakanById(id_booth: string): Promise<Kerusakan[]> {
-        const [rows] = await this.db.query<RowDataPacket[]>('SELECT * FROM riwayat_kerusakan WHERE id_booth = ?', [id_booth]);
-        return rows as Kerusakan[];
-    }
-    // BoothService.ts
-    public async deleteKerusakan(id: number): Promise<boolean> {
-        const [result] = await this.db.query<ResultSetHeader>('DELETE FROM riwayat_kerusakan WHERE id = ?', [id]);
-        return result.affectedRows > 0; // Menggunakan result yang bertipe ResultSetHeader
-    }
-
     
 
 }

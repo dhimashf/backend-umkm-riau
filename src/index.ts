@@ -13,6 +13,7 @@ import produkPembelianRoutes from './routes/produkPembelianRoutes';
 import buktiPembayaranRoutes from './routes/buktiPembayaranRoutes';
 import PemantauanBisnisRoutes from './routes/pemantauanBisnisRoutes';
 import bayarsewaRoutes from './routes/bayarsewaRoutes';
+import kerusakanRoutes from './routes/kerusakanRoutes';
 dotenv.config();
 
 class App {
@@ -59,6 +60,7 @@ class App {
         this.app.use('/api/bukti', buktiPembayaranRoutes);
         this.app.use('/api/pemantauan-bisnis', PemantauanBisnisRoutes);
         this.app.use('/api/sewa', bayarsewaRoutes);
+        this.app.use('/api/kerusakan', kerusakanRoutes);
     }
 }
 
