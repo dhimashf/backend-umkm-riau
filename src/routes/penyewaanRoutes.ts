@@ -6,7 +6,7 @@ const controller = new PenyewaanController();
 
 penyewaanRoutes.get('/', controller.getAllPenyewaan.bind(controller));
 penyewaanRoutes.get('/lokasi/', controller.getLokasiBooth.bind(controller));
-penyewaanRoutes.get('/:booth_id_booth', controller.getPenyewaanByBoothId.bind(controller));
+penyewaanRoutes.get('/booth/:booth_id_booth', controller.getPenyewaanByBoothId.bind(controller));
 penyewaanRoutes.get('/:biodata_nik', controller.getPenyewaanByNik.bind(controller));
 penyewaanRoutes.post('/', controller.addPenyewaan.bind(controller));
 penyewaanRoutes.put('/:biodata_nik', controller.updatePenyewaan.bind(controller));
