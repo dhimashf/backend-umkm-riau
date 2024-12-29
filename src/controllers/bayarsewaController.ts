@@ -124,34 +124,43 @@ class bayarSewaController {
             });
         }
     }
-    public async deleteSewaByidSewa(req: Request, res: Response): Promise<void> {
+    public async deleteBayarSewaByIdSewa(req: Request, res: Response): Promise<void> {
         const { id_sewa } = req.params;
 
+        // Validate id_sewa
+        if (!id_sewa || isNaN(Number(id_sewa))) {
+            res.status(400).json({
+                success: false,
+                message: 'ID Sewa tidak valid.'
+            });
+            return;
+        }
+
         try {
-            // Hapus dokumentasi menggunakan service
             const deleted = await this.BayarSewaService.deleteBayarSewaByIdSewa(Number(id_sewa));
 
             if (!deleted) {
                 res.status(404).json({
                     success: false,
-                    message: 'Bukti Bayar tidak ditemukan.',
+                    message: 'Bukti Bayar tidak ditemukan.'
                 });
                 return;
             }
 
             res.status(200).json({
                 success: true,
-                message: 'Bukti Bayar berhasil dihapus.',
+                message: 'Bukti Bayar berhasil dipindahkan ke riwayat dan dihapus dari database.'
             });
         } catch (error) {
-            console.error(`Error menghapus Bukti Bayar dengan ID ${id_sewa}:`, error);
+            console.error(`Error saat menghapus Bukti Bayar dengan ID ${id_sewa}:`, error);
             res.status(500).json({
                 success: false,
-                message: 'Gagal menghapus Bukti Bayar.',
-                error: (error as Error).message,
+                message: 'Gagal memproses Bukti Bayar.',
+                error: error instanceof Error ? error.message : 'Unknown error'
             });
         }
     }
+    
 }
 
 export default bayarSewaController;

@@ -74,25 +74,61 @@ class BayarSewaService {
         }
 
         public async deleteBayarSewaByIdSewa(id_sewa: number): Promise<boolean> {
+            const connection = await this.db.getConnection();
+    
             try {
-                // Dapatkan data dokumentasi untuk mengambil public_id
-                const [currentData]: any = await this.db.query('SELECT bukti FROM bayar_sewa WHERE id_sewa = ?', [id_sewa]);
-                if (currentData.length > 0) {
-                    const buktiPublicId = currentData[0].foto;
-                    if (buktiPublicId) {
-                        // Hapus file dari Cloudinary
-                        await cloudinary.uploader.destroy(buktiPublicId);
+                await connection.beginTransaction();
+    
+                // Step 1: Get current data from bayar_sewa
+                const [currentData]: any[] = await connection.query(
+                    'SELECT * FROM bayar_sewa WHERE id_sewa = ?',
+                    [id_sewa]
+                );
+    
+                if (currentData.length === 0) {
+                    await connection.commit(); // Commit to release the lock
+                    return false;
+                }
+    
+                const bayarSewaData = currentData[0];
+    
+                // Step 2: Insert data into riwayat_sewa
+                await connection.query(
+                    `INSERT INTO riwayat_sewa (id_sewa, tanggal, bukti, jumlah)
+                    VALUES (?, ?, ?, ?)`,
+                    [
+                        id_sewa,
+                        bayarSewaData.tanggal,
+                        bayarSewaData.bukti,
+                        bayarSewaData.jumlah
+                    ]
+                );
+    
+                // Step 3: Delete file from Cloudinary if it exists
+                if (bayarSewaData.bukti) {
+                    try {
+                        await cloudinary.uploader.destroy(bayarSewaData.bukti);
+                    } catch (cloudError) {
+                        console.error('Error deleting file from Cloudinary:', cloudError);
                     }
                 }
     
-                // Hapus dari database
-                const [result]: any = await this.db.query('DELETE FROM bayar_sewa WHERE id_sewa = ?', [id_sewa]);
-                return result.affectedRows > 0; // Berhasil dihapus jika ada baris yang terpengaruh
+                // Step 4: Delete data from bayar_sewa
+                const [deleteResult]: any = await connection.query(
+                    'DELETE FROM bayar_sewa WHERE id_sewa = ?',
+                    [id_sewa]
+                );
+    
+                await connection.commit();
+                return deleteResult.affectedRows > 0;
             } catch (error) {
-                console.error('Error deleting dokumentasi:', error);
-                return false; // Gagal
+                await connection.rollback();
+                console.error('Error in deleteBayarSewaByIdSewa:', error);
+                return false;
+            } finally {
+                connection.release();
             }
         }
-}
+    }
 
 export default BayarSewaService;
