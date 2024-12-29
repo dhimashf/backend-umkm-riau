@@ -17,7 +17,6 @@ boothRoutes.get('/:id', controller.getBoothByID.bind(controller));
 boothRoutes.post('/', controller.addBooth.bind(controller));
 
 // Route untuk memperbarui booth berdasarkan ID
-boothRoutes.put('/:id_booth', controller.updateBooth.bind(controller));
 
 boothRoutes.put('/status/:id_booth', controller.updateStatus.bind(controller));
 

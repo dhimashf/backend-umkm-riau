@@ -43,16 +43,16 @@ class BoothService {
     }
 
     // Memperbarui data booth
-    public async updateBooth(id_booth: string, booth: Partial<Booth>): Promise<boolean> {
-        const { ukuran, status } = booth;
-        const [result]: any = await this.db.query('UPDATE booth SET ukuran = ?, status = ? = ? WHERE id_booth = ?', [ukuran, status, id_booth]);
-        return result.affectedRows > 0;
-    }
-    public async updateStatus(id_booth: string, booth: Partial<Booth>): Promise<boolean> {
-        const { status} = booth;
-        const [result]: any = await this.db.query('UPDATE booth SET status = ? WHERE id_booth = ?', [status, id_booth]);
-        return result.affectedRows > 0;
-    }
+// Fungsi untuk update booth secara umum
+
+// Fungsi untuk update status booth
+public async updateStatus(id_booth: string, status: string): Promise<boolean> {
+    const query = 'UPDATE booth SET status = ? WHERE id_booth = ?';
+    const [result]: any = await this.db.query(query, [status, id_booth]);
+    return result.affectedRows > 0;
+}
+
+// Memperbarui status booth
 
     // Menghapus booth berdasarkan ID
     public async deleteBooth(id_booth: string): Promise<boolean> {
