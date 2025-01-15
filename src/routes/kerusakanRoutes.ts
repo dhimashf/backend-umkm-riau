@@ -1,10 +1,11 @@
 import { Router } from 'express';
 import KerusakanController from '../controllers/kerusakanController';
+import { upload } from '../middlewares/uploadMiddleware';
 
 const kerusakanRoutes = Router();
 const controller = new KerusakanController();
 
-kerusakanRoutes.post('/', controller.addKerusakan.bind(controller));
+kerusakanRoutes.post('/', upload.single('bukti_kerusakan'), controller.addKerusakan.bind(controller)); // Menambahkan dokumentasi baru
 
 // Route untuk mendapatkan semua kerusakan
 kerusakanRoutes.get('/', controller.getAllKerusakan.bind(controller));

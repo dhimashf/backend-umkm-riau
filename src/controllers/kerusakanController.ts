@@ -4,22 +4,53 @@ class KerusakanController {
     private kerusakanService = new KerusakanService();
 
 public async addKerusakan(req: Request, res: Response): Promise<void> {
+    try {
         const { id_booth, tanggal_kerusakan, riwayat_kerusakan } = req.body;
+        const fotoPath = req.file?.path; // Path file dari Multer
 
-        try {
-            await this.kerusakanService.addKerusakan(id_booth, tanggal_kerusakan, riwayat_kerusakan);
+        // Validasi input
+        if ( !id_booth || !tanggal_kerusakan || !riwayat_kerusakan) {
+            res.status(400).json({
+                success: false,
+                message: 'Semua field (id_booth, tanggal_kerusakan, riwayat_kerusakan) harus diisi.',
+            });
+            return;
+        }
+
+        if (!fotoPath) {
+            res.status(400).json({
+                success: false,
+                message: 'File foto harus diunggah.',
+            });
+            return;
+        }
+
+        // Tambah dokumentasi menggunakan service
+        const isSuccess = await this.kerusakanService.addKerusakan(
+            {id_booth, tanggal_kerusakan, riwayat_kerusakan, bukti_kerusakan: '' }, // `foto` akan diisi oleh service
+            fotoPath
+        );
+
+        if (isSuccess) {
             res.status(201).json({
                 success: true,
-                message: 'Kerusakan berhasil ditambahkan.',
+                message: 'kerusakan berhasil ditambahkan.',
             });
-        } catch (error) {
+        } else {
             res.status(500).json({
                 success: false,
                 message: 'Gagal menambahkan kerusakan.',
-                error: (error as Error).message,
             });
         }
+    } catch (error) {
+        console.error('Gagal menabahkan kerusakan:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Internal server error saat menambahkan kerusakan.',
+            error: (error as Error).message,
+        });
     }
+}
 
     // Mendapatkan semua kerusakan
     public async getAllKerusakan(req: Request, res: Response): Promise<void> {

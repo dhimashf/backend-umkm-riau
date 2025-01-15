@@ -1,22 +1,42 @@
 import { RowDataPacket, ResultSetHeader } from 'mysql2';
 import Database from '../config/database';
+import cloudinary from '../config/cloudinary';
 
 interface Kerusakan {
-    id: number;
     id_booth: string;
     tanggal_kerusakan: string;
     riwayat_kerusakan: string;
+    bukti_kerusakan: string;
 }
 
 class KerusakanService {
     private db = Database.getInstance().getConnection();
 
-    public async addKerusakan(id_booth: string, tanggal_kerusakan: string, riwayat_kerusakan: string): Promise<void> {
-        await this.db.query(
-            'INSERT INTO riwayat_kerusakan (id_booth, tanggal_kerusakan, riwayat_kerusakan) VALUES (?, ?, ?)',
-            [id_booth, tanggal_kerusakan, riwayat_kerusakan]
-        );
-    }
+    public async addKerusakan(kerusakan: Kerusakan, filePath: string): Promise<boolean> {
+       try {
+                  
+           
+                   // Upload file ke Cloudinary satu kali
+                   const uploadResponse = await cloudinary.uploader.upload(filePath, {
+                       folder: 'products',
+                   });
+           
+                   // Dapatkan public_id dari Cloudinary
+                   const buktiPublicId = uploadResponse.secure_url; // Mengambil URL lengkap yang dihasilkan oleh Cloudinary
+                   const { id_booth, tanggal_kerusakan, riwayat_kerusakan } = kerusakan;
+           
+                   // Simpan data ke database, termasuk public_id
+                   await this.db.query(
+                       'INSERT INTO riwayat_kerusakan (id_booth, tanggal_kerusakan, riwayat_kerusakan, bukti_kerusakan) VALUES (?, ?, ?, ?)',
+                       [id_booth, tanggal_kerusakan, riwayat_kerusakan, buktiPublicId]
+                   );
+           
+                   return true; // Berhasil
+               } catch (error) {
+                   console.error('Error adding kerusakan:', error);
+                   return false; // Gagal
+               }
+           }
 
     // Mengambil semua riwayat kerusakan
     public async getAllKerusakan(): Promise<RowDataPacket[]> {
